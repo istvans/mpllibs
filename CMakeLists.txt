@@ -81,7 +81,7 @@ else()
   set(WEBSITE_FILES ${WEBSITE_FILES} ${WEBSITE_ROOT}/metatest/jquery.js)
   
   # The libraries
-  foreach(L metatest metamonad metaparse safe_printf)
+  foreach(L metatest metamonad metaparse safe_printf xlxpressive)
     set(DIR ${CMAKE_SOURCE_DIR}/libs/${L})
     file(GLOB FILES ${DIR}/doc/*.txt)
     list(REMOVE_ITEM FILES ${DIR}/doc/CMakeLists.txt ${DIR}/doc/index.txt)
