@@ -1,0 +1,19 @@
+Copyright Abel Sinkovics (abel@sinkovics.hu)  2009 - 2010.
+Distributed under the Boost Software License, Version 1.0.
+   (See accompanying file LICENSE_1_0.txt or copy at
+         http://www.boost.org/LICENSE_1_0.txt)
+
+<REG_EXP>       ::= <BOS><EOS>|
+<BOS>           ::= ^
+<EOS>           ::= $
+<GROUP_EXP>     ::= (<EXP>)
+<BRACKET_EXP>   ::= [<NEGATE><RANGE>]|[RANGE]|[CHAR_GROUP]
+<RANGE>         ::= <DIGIT>-<DIGIT>|<LETTERS>
+<CHAR_GROUP>    ::= :alnum:|:alpha:|:blank:|:cntrl:|:digit:|:graph:|:lower:|:print:|:punct:|:space:|:upper:|:xdigit:
+<EXP>           ::= 
+<MULT_SIGN>     ::= *|+|?
+<CHARACTER>     ::= <LETTER>|<DIGIT>
+<LETTERS>       ::= <LETTER>|<LETTERS><LETTER>
+<LETTER>        ::= 
+<DIGIT>         ::= 0|1|2|3|4|5|6|7|8|9
+
