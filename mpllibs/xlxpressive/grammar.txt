@@ -127,5 +127,7 @@ it2    ::= 'i' (t02|set)
 t02    ::= 't' (chg12|set)
 chg12  ::= ':' (xdigit|set)
 xdigit ::= ']'
+char ::= 
 number ::= ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')
+item ::= 
 
