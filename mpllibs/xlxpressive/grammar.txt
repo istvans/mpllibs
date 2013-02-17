@@ -3,27 +3,129 @@ Distributed under the Boost Software License, Version 1.0.
    (See accompanying file LICENSE_1_0.txt or copy at
          http://www.boost.org/LICENSE_1_0.txt)
 
+Possible scenarios:
 1. Tranform normal regular expression -given as a string- into
    expression template to make its user interface nicer and more
    natural. Report error, if tranformation isn't possible i.e. the
    regular expression is not valid.
-2. Transform like above and validate, since the string need to be
-   parsed anyway, we can report not supported regular expresions. In
-   this case, why we need the compile-time error functionality which
-   static regexes provide?
-3. Validate regex and use the run-time regex interface to 'compile' the
-   regular expression.
+2. Validate regex and use the run-time regex interface to 'compile' the
+   regular expression. This is not a good approach, because we want
+   compile-time meta-compilation and to not introduce overhead on
+   runtime.
 
-<REG_EXP>       ::= ['^']['$']
-<GROUP_EXP>     ::= (<EXP>)
-<BRACKET_EXP>   ::= [<NEGATE><RANGE>]|[RANGE]|[CHAR_GROUP]
-<RANGE>         ::= <DIGIT>-<DIGIT>|<LETTERS>
-<CHAR_GROUP>    ::= ':alnum:'|':alpha:'|':blank:'|':cntrl:'|':digit:'|':graph:'|':lower:'|':print:'|':punct:'|':space:'|':upper:'|':xdigit:'
-<EXP>           ::= 
-<MULT_SIGN>     ::= *|+|?
-<CHARACTER>     ::= <LETTER>|<DIGIT>
-<LETTERS>       ::= <LETTER>|<LETTERS><LETTER>
-<LETTER>        ::= 
-<DIGIT>         ::= '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
-
+reg_exp ::= seq ('|' seq)*
+seq ::= unary_item*
+unary_item ::= item (('*'|'+'|'?'|repeat) '?'?)?
+repeat ::= '{' number ',' number '}'
+bracket_exp ::= '(' (reg_exp|qexp) ')'
+qexp ::= '?' (icase|keep|before|not_before|after|not_after|mark_tag_create|mark_tag_use) reg_exp
+icase            ::= 'i' ':'
+keep             ::= '>'
+before           ::= '='
+not_before       ::= '!'
+after            ::= '<' '='
+not_after        ::= '<' '!'
+mark_tag_create  ::= 'P' '<' name '>'
+mark_tag_use     ::= 'P' '=' name
+name             ::= char*
+any ::= '.'
+bschar ::= '\' (bs_backslash|bs_back_ref|bs_boundary|bs_digit|bs_word|bs_space|bs_new_line)
+bs_backslash ::= '\'
+bs_back_ref  ::= number
+bs_boundary  ::= ('b'|not_bs_boundary)
+not_bs_boundary ::= 'B'
+bs_digit     ::= ('d'|not_bs_digit)
+not_bs_digit ::= 'D'
+bs_word      ::= ('w'|not_bs_word)
+not_bs_word  ::= 'W'
+bs_space     ::= ('s'|not_bs_space)
+not_bs_space ::= 'S'
+bs_new_line  ::= ('r'? '\' 'n'|'n')
+group ::= '[' (char_group|'^'? set)
+set ::= (item|range)* ']'
+range ::= (number '-' number|char '-' char)
+char_group ::= ':' (a|b|c|d|g|l|p|s|u|x|set)
+a      ::= 'a' (lnp|set)
+lnp      ::= 'l' (n|ph|set)
+n        ::= 'n' (um|set)
+um       ::= 'u' (m|set)
+m        ::= 'm' (chg1|set)
+chg1     ::= ':' (alnum|set)
+alnum    ::= ']'
+ph       ::= 'p' (h|set)
+h        ::= 'h' (a0|set)
+a0       ::= 'a' (chg2|set)
+chg2     ::= ':' (alpha|set)
+alpha    ::= ']'
+b      ::= 'b' (la|set)
+la     ::= 'l' (an|set)
+an     ::= 'a' (nk|set)
+nk     ::= 'n' (k|set)
+k      ::= 'k' (chg3|set)
+chg3   ::= ':' (blank|set)
+blank  ::= ']'
+c      ::= 'c' (nt|set)
+nt     ::= 'n' (t|set)
+t      ::= 't' (r|set)
+r      ::= 'r' (l0|set)
+l0     ::= 'l' (chg4|set)
+chg4   ::= ':' (cntrl|set)
+cntrl  ::= ']'
+d      ::= 'd' (i|set)
+i      ::= 'i' (gi|set)
+gi     ::= 'g' (it|set)
+it     ::= 'i' (t01|set)
+t01    ::= 't' (chg5|set)
+chg5   ::= ':' (digit|set)
+digit  ::= ']'
+g      ::= 'g' (ra|set)
+ra     ::= 'r' (ap|set)
+ap     ::= 'a' (ph2|set)
+ph2    ::= 'p' (h0|set)
+h0     ::= 'h' (chg6|set)
+chg6   ::= ':' (graph|set)
+graph  ::= ']'
+l      ::= 'l' (o|set)
+o      ::= 'o' (w|set)
+w      ::= 'w' (e|set)
+e      ::= 'e' (r01|set)
+r01    ::= 'r' (chg7|set)
+chg7   ::= ':' (lower|set)
+lower  ::= ']'
+p      ::= 'p' (ri|un|set)
+ri       ::= 'r' (in|set)
+in       ::= 'i' (nt2|set)
+nt2      ::= 'n' (t02|set)
+t02      ::= 't' (chg8|set)
+chg5     ::= ':' (print|set)
+print    ::= ']'
+un       ::= 'u' (nc|set)
+nc       ::= 'n' (ct|set)
+ct       ::= 'c' (t03|set)
+t03      ::= 't' (chg9|set)
+chg9     ::= ':' (punct|set)
+punct    ::= ']'
+s      ::= 's' (pa|set)
+pa     ::= 'p' (ac|set)
+ac     ::= 'a' (ce|set)
+ce     ::= 'c' (e0|set)
+e0     ::= 'e' (chg10|set)
+chg10  ::= ':' (space|set)
+space  ::= ']'
+u      ::= 'u' (pp|set)
+pp     ::= 'p' (pe|set)
+pe     ::= 'p' (er|set)
+er     ::= 'e' (r02|set)
+r02    ::= 'r' (chg11|set)
+chg11  ::= ':' (upper|set)
+upper  ::= ']'
+x      ::= 'x' (di|set)
+di     ::= 'd' (ig|set)
+ig     ::= 'i' (gi2|set)
+gi2    ::= 'g' (it2|set)
+it2    ::= 'i' (t02|set)
+t02    ::= 't' (chg12|set)
+chg12  ::= ':' (xdigit|set)
+xdigit ::= ']'
+number ::= ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')
 
