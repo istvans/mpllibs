@@ -26,7 +26,7 @@ Description
 
 Compile-time data-structure representing an error that occured during the
 evaluation of template metaprograms. +Data+ is a compile-time data-structure
-describing the error. This data can be queried by link:get_data.html[get_data].
+describing the error.
 
 Header
 ------
@@ -35,21 +35,10 @@ Header
 #include <mpllibs/metamonad/exception.hpp>
 --------------------------------------
 
-Expression semantics
---------------------
-
-For any +d+ compile-time value, the following are equivalent
-
---------------------------------------
-mpllibs::metamonad::get_data<exception<d> >::type
-d::type
---------------------------------------
-
 Example
 -------
 
 --------------------------------------
-using boost::mpl::eval_if;
 using boost::mpl::equal_to;
 using boost::mpl::int_;
 
@@ -57,7 +46,7 @@ struct division_by_zero;
 
 template <class A, class B>
 struct divide :
-  eval_if<
+  if_<
     equal_to<A, int_<0> >,
     exception<division_by_zero>,
     divides<A, B>

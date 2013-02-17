@@ -11,10 +11,10 @@ Synopsis
 --------
 
 --------------------------------------
-template <class Name, class F>
+template <class Name1, ..., class Namen, class F>
 struct lambda
 {
-  template <class T>
+  template <class T1, ..., class Tn>
   struct apply
     // unspecified
   ;
@@ -25,10 +25,17 @@ struct lambda
 Description
 -----------
 
-+Name+ is a class, +F+ is a nullary metafunction. The +lambda+ metafunction
-class takes a class, +T+, as an argument and produces a new nullary
-metafunction. It binds +T+ to +Name+ in the body of +F+ using
-link:let.html[let].
++Name1+, ..., +Namen+ are classes, +F+ is a syntax. The +lambda+ metafunction
+class takes classes, +T1+, ..., +Tn+ as arguments and produces a new nullary
+metafunction. It binds +T1+, ..., +Tn+ to the names +Name1+, ..., +Namen+ in the
+body of +F+ using link:let.html[let].
+
+The arguments may be +_+, in which case the value of the argument is ignored and
+no substitution happens.
+
+The metafunction classes support currying as well. Applying less arguments to
+the metafunction class as +n+ produces a new metafunction class taking the
+missing arguments. +F+ is evaluated only when all arguments are provided.
 
 Header
 ------
@@ -40,16 +47,36 @@ Header
 Expression semantics
 --------------------
 
-For any +n+ and +t+ classes and +f+ nullary metafunction
+For any +k > 0+, +n1+ ... +nk+ and +t1+ ... +tk+ classes and +f+ nullary
+metafunction
 
 --------------------------------------
-boost::mpl::apply<lambda<n, f>, t>
+lambda<n1, ..., nk, syntax<f>>::apply<t1, ..., tk>::type
 --------------------------------------
 
 is equivalent to
 
 --------------------------------------
-let<n, t, f>::type
+multi_let<
+  mpl::map<
+    mpl::pair<n1, t1>,
+    // ...
+    mpl::pair<nk, tk>
+  >,
+  syntax<f>
+>::type::type
+--------------------------------------
+
+For any +0 < j < k+
+
+--------------------------------------
+lambda<n1, ..., nk, syntax<f>>::apply<t1, ..., tj>::type::apply<t(j+1), ..., tk>::type
+--------------------------------------
+
+is equivalent to
+
+--------------------------------------
+lambda<n1, ..., nk, syntax<f>>::apply<t1, ..., tk>::type
 --------------------------------------
 
 Example
@@ -59,9 +86,9 @@ Example
 using boost::mpl::plus;
 using boost::mpl::int_;
 
-struct n;
+using namespace mpllibs::metamonad::name;
 
-typedef lambda<n, plus<int_<1>, n> > plus_1;
+typedef lambda<n, syntax<plus<int_<1>, n>>> plus_1;
 --------------------------------------
 
 include::copyright[]

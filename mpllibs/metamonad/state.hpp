@@ -7,73 +7,37 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mpllibs/metamonad/monad.hpp>
-#include <mpllibs/metamonad/tag_tag.hpp>
+#include <mpllibs/metamonad/tmp_tag.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
+#include <mpllibs/metamonad/lazy.hpp>
+#include <mpllibs/metamonad/name.hpp>
+#include <mpllibs/metamonad/eval_match_let_c.hpp>
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
-#include <boost/mpl/always.hpp>
-#include <boost/mpl/apply.hpp>
+#include <boost/mpl/apply_wrap.hpp>
 #include <boost/mpl/pair.hpp>
 
 namespace mpllibs
 {
   namespace metamonad
   {
-    MPLLIBS_DEFINE_TAG(state_tag)
+    struct state_tag : tmp_tag<state_tag> {};
     
     template <>
     struct monad<state_tag> : monad_defaults<state_tag>
     {
-      struct return_
-      {
-        typedef return_ type;
-        
-        template <class T>
-        struct apply
-        {
-        private:
-          struct impl
-          {
-            typedef impl type;
+      typedef lambda_c<t, s, boost::mpl::pair<t, s> > return_;
 
-            template <class S>
-            struct apply : boost::mpl::pair<T, S> {};
-          };
-        public:
-          typedef impl type;
-        };
-      };
-      
-      struct bind
-      {
-      private:
-        template <class A, class F>
-        struct impl
-        {
-          typedef impl type;
-          
-          template <class S>
-          struct apply
-          {
-          private:
-            typedef typename boost::mpl::apply<A, S>::type apply_first;
-            typedef typename apply_first::first new_value;
-            typedef typename apply_first::second new_state;
-          public:
-            typedef
-              typename boost::mpl::apply<
-                typename boost::mpl::apply<F, new_value>::type,
-                new_state
-              >::type
-              type;
-          };
-        };
-      public:
-        template <class A, class F>
-        struct apply : impl<A, F> {};
-        
-        typedef bind type;
-      };
+      typedef
+        lambda_c<a, f, s,
+          eval_match_let_c<
+            boost::mpl::pair<t, u>,
+            lazy<boost::mpl::apply_wrap1<a, s> >,
+            lazy<boost::mpl::apply_wrap1<boost::mpl::apply_wrap1<f, t>, u> >
+          >
+        >
+        bind;
     };
   }
 }

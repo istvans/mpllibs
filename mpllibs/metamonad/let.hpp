@@ -6,87 +6,38 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mpllibs/metamonad/util/id.hpp>
-
-#include <mpllibs/metatest/to_stream_fwd.hpp>
-
-#include <boost/preprocessor/repetition.hpp>
-#include <boost/preprocessor/comma_if.hpp>
-#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <mpllibs/metamonad/impl/let.hpp>
+#include <mpllibs/metamonad/returns.hpp>
+#include <mpllibs/metamonad/var.hpp>
 
 namespace mpllibs
 {
   namespace metamonad
   {
-    template <class A, class E1, class E2>
-    struct let_impl;
+    namespace impl
+    {
+      template <class A, class E1, class E2>
+      struct strict_let;
 
-    template <class A, class E1, class E2>
-    struct let : let_impl<A, E1, E2> {};
-
-    template <class A, class E1>
-    struct let<A, E1, A> : mpllibs::metamonad::util::id<E1> {};
-
-    
-    // let_impl assumes, that let_impl<A, E1, A> is never instantiated
-    template <class A, class E1, class E2>
-    struct let_impl : mpllibs::metamonad::util::id<E2> {};
-
-    template <class A, class E1a, class E1b, class E2>
-    struct let_impl<A, E1a, let<A, E1b, E2> > :
-      mpllibs::metamonad::util::id<let<A, E1b, E2> >
-    {};
-
-    template <class A, class E1, class E2>
-    struct letrec;
-
-    template <class A, class E1a, class E1b, class E2>
-    struct let_impl<A, E1a, letrec<A, E1b, E2> > :
-      mpllibs::metamonad::util::id<letrec<A, E1b, E2> >
-    {};
-
-    #ifndef MPLLIBS_LET_MAX_TEMPLATE_ARGUMENT
-      #define MPLLIBS_LET_MAX_TEMPLATE_ARGUMENT 10
-    #endif
-    
-    #ifdef MPLLIBS_LET_CLASS
-      #error MPLLIBS_LET_CLASS alread defined
-    #endif
-    #define MPLLIBS_LET_CLASS(z, n, unused) \
-      BOOST_PP_COMMA_IF(n) class
-    
-    #ifdef MPLLIBS_LET_REC_CASE
-      #error MPLLIBS_LET_REC_CASE alread defined
-    #endif
-    #define MPLLIBS_LET_REC_CASE(z, n, unused) \
-      BOOST_PP_COMMA_IF(n) typename let<A, E1, X##n>::type
-
-    #ifdef MPLLIBS_LET_TEMPLATE_CASE
-      #error MPLLIBS_LET_TEMPLATE_CASE already defined
-    #endif
-    #define MPLLIBS_LET_TEMPLATE_CASE(z, n, unused) \
-      template < \
-        class A, \
-        class E1, \
-        template<BOOST_PP_REPEAT(n, MPLLIBS_LET_CLASS, ~) > class T, \
-        BOOST_PP_ENUM_PARAMS(n, class X) \
-      > \
-      struct let_impl<A, E1, T<BOOST_PP_ENUM_PARAMS(n, X)> > : \
-        mpllibs::metamonad::util::id< \
-          T<BOOST_PP_REPEAT(n, MPLLIBS_LET_REC_CASE, ~) > \
-        > \
+      template <class A, class E1, class E2>
+      struct strict_let<var<A>, syntax<E1>, syntax<E2> > :
+        syntax<typename impl::let_in_syntax<var<A>, E1, E2>::type>
       {};
-    
-    BOOST_PP_REPEAT_FROM_TO(
-      1,
-      MPLLIBS_LET_MAX_TEMPLATE_ARGUMENT,
-      MPLLIBS_LET_TEMPLATE_CASE,
-      ~
-    )
+    }
 
-    #undef MPLLIBS_LET_TEMPLATE_CASE
-    #undef MPLLIBS_LET_CLASS
-    #undef MPLLIBS_LET_REC_CASE
+    // MPLLIBS_LAZY_METAFUNCTION depends on it
+    template <class A, class E1, class E2>
+    struct let :
+      impl::strict_let<typename A::type, typename E1::type, typename E2::type>
+    {};
+
+    namespace impl
+    {
+      template <class A, class E1a, class E1b, class E2>
+      struct let_impl<A, E1a, let<A, E1b, E2> > :
+        returns<let<A, E1b, E2> >
+      {};
+    }
   }
 }
 

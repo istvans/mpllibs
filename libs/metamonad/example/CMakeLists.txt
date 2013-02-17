@@ -7,4 +7,6 @@ subdirs(
   fib
   min
   min_with_do
+  list_comprehension
+  typeclass
 )

@@ -7,11 +7,16 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mpllibs/metamonad/typeclass.hpp>
+#include <mpllibs/metamonad/mempty.hpp>
+#include <mpllibs/metamonad/mappend.hpp>
+#include <mpllibs/metamonad/lambda_c.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
+#include <mpllibs/metamonad/syntax.hpp>
+#include <mpllibs/metamonad/name.hpp>
+#include <mpllibs/metamonad/lazy.hpp>
+#include <mpllibs/metamonad/already_lazy.hpp>
 
-#include <boost/mpl/apply_wrap.hpp>
 #include <boost/mpl/reverse_fold.hpp>
-
-#include <iostream>
 
 namespace mpllibs
 {
@@ -20,27 +25,26 @@ namespace mpllibs
     template <class Tag>
     struct monoid
     {
-      MPLLIBS_TYPECLASS_EXPECT(empty)
-      MPLLIBS_TYPECLASS_EXPECT(append)
-      MPLLIBS_TYPECLASS_EXPECT(concat)
+      MPLLIBS_TYPECLASS_EXPECT(mempty);
+      MPLLIBS_TYPECLASS_EXPECT(mappend);
+      MPLLIBS_TYPECLASS_EXPECT(mconcat);
     };
     
     template <class Tag>
     struct monoid_defaults : monoid<typeclass_expectations>
     {
-      struct concat
-      {
-        typedef concat type;
-      
-        template <class L>
-        struct apply :
-          boost::mpl::reverse_fold<
-            L,
-            typename monoid<Tag>::empty,
-            typename monoid<Tag>::append
+      typedef
+        lambda_c<l,
+          lazy<
+            boost::mpl::reverse_fold<
+              already_lazy<l>,
+              mpllibs::metamonad::mempty<already_lazy<Tag> >,
+              lambda<s, t, syntax<mpllibs::metamonad::mappend<Tag, s, t> > >,
+              lambda_c<x, _, x>
+            >
           >
-        {};
-      };
+        >
+        mconcat;
     };
   }
 }

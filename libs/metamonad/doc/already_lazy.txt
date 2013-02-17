@@ -23,9 +23,10 @@ Description
 -----------
 
 +Exp+ is an angly bracket expression of metafunctions calling each other with
-other angly bracket expressions as arguments. +already_lazy+ is expected to be
-used in the expression passed to link:lazy.html[lazy]. The content of
-+already_lazy+ is not transformed by +lazy+.
+other angly bracket expressions as arguments. When +already_lazy+ is used
+inside link:lazy.html[+lazy+], the content of +already_lazy+ is not transformed
+by +lazy+. When it is used outside of +lazy+, it does not change the meaning of
+the wrapped expression.
 
 Header
 ------
@@ -37,16 +38,16 @@ Header
 Expression semantics
 --------------------
 
-For any +c+ class
+For any +c+ class the following are equivalent
 
 --------------------------------------
 lazy<already_lazy<c> >::type
---------------------------------------
-
-is equivalent to
-
---------------------------------------
 c
+--------------------------------------
+
+--------------------------------------
+already_lazy<c>::type
+c::type
 --------------------------------------
 
 Example

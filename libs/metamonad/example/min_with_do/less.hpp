@@ -6,33 +6,30 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mpllibs/metamonad/throw.hpp>
-#include <mpllibs/metamonad/tag_tag.hpp>
-#include <mpllibs/metamonad/meta_atom.hpp>
+#include <mpllibs/metamonad/exception.hpp>
+#include <mpllibs/metamonad/tmp_tag.hpp>
+#include <mpllibs/metamonad/tmp_value.hpp>
 
 #include <boost/mpl/apply_wrap.hpp>
 #include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/always.hpp>
 
-MPLLIBS_DEFINE_TAG(non_comparable_tag)
-MPLLIBS_DEFINE_META_ATOM(non_comparable_tag, non_comparable)
+struct non_comparable_tag : mpllibs::metamonad::tmp_tag<non_comparable_tag> {};
+struct non_comparable :
+  mpllibs::metamonad::tmp_value<non_comparable, non_comparable_tag>
+{};
 
 namespace boost
 {
   namespace mpl
   {
     template <>
-    struct equal_to_impl<non_comparable_tag, non_comparable_tag>
-    {
-      template <class A, class B>
-      struct apply : boost::mpl::true_ {};
-    };
+    struct equal_to_impl<non_comparable_tag, non_comparable_tag> :
+      always<true_>
+    {};
     
     template <class T>
-    struct equal_to_impl<non_comparable_tag, T>
-    {
-      template <class A, class B>
-      struct apply : boost::mpl::false_ {};
-    };
+    struct equal_to_impl<non_comparable_tag, T> : always<false_> {};
 
     template <class T>
     struct equal_to_impl<T, non_comparable_tag> :
@@ -42,11 +39,9 @@ namespace boost
 }
 
 template <class TagA, class TagB>
-struct less_impl
-{
-  template <class A, class B>
-  struct apply : mpllibs::metamonad::throw_<non_comparable> {};
-};
+struct less_impl :
+  boost::mpl::always<mpllibs::metamonad::exception<non_comparable> >
+{};
 
 template <class A, class B>
 struct less :
@@ -65,13 +60,10 @@ typedef boost::mpl::tag<boost::mpl::int_<0> >::type int_tag;
 template <>
 struct less_impl<int_tag, int_tag>
 {
+  // Visual C++ 2010 fails to compile it when operator< is used instead of
+  // operator >
   template <class A, class B>
-  struct apply
-  {
-    static const int value = A::value < B::value;
-
-    typedef boost::mpl::bool_<value> type;
-  };
+  struct apply : boost::mpl::bool_< !(A::value > B::value)> {};
 };
 
 #endif

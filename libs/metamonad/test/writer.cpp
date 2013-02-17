@@ -7,6 +7,10 @@
 
 #include <mpllibs/metamonad/writer.hpp>
 #include <mpllibs/metamonad/list.hpp>
+#include <mpllibs/metamonad/tmp_value.hpp>
+#include <mpllibs/metamonad/metafunction.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
+#include <mpllibs/metamonad/name.hpp>
 
 #include <mpllibs/metatest/boost_test.hpp>
 #include <boost/test/unit_test.hpp>
@@ -20,18 +24,15 @@
 using boost::mpl::list;
 using boost::mpl::pair;
 using boost::mpl::plus;
+
+using mpllibs::metamonad::tmp_value;
+using mpllibs::metamonad::lambda_c;
+using namespace mpllibs::metamonad::name;
   
 namespace
 {
-  template <class A>
-  struct log_plus
-  {
-    typedef log_plus type;
-    
-    template <class R>
-    struct apply : pair<plus<A, R>, list<A> > {};
-  };
-
+  MPLLIBS_METAFUNCTION(log_plus, (A))
+  ((lambda_c<r, pair<plus<A,r>, list<A> > >));
 }
 
 BOOST_AUTO_TEST_CASE(test_writer)

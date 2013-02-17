@@ -6,22 +6,23 @@
 #define BOOST_TEST_DYN_LINK
 
 #include <mpllibs/metamonad/return_.hpp>
-#include <mpllibs/metamonad/tag_tag.hpp>
+#include <mpllibs/metamonad/tmp_tag.hpp>
+#include <mpllibs/metamonad/lambda_c.hpp>
+#include <mpllibs/metamonad/returns.hpp>
 
 #include <mpllibs/metatest/boost_test.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/apply_wrap.hpp>
-#include <boost/mpl/identity.hpp>
 
 #include "common.hpp"
 
-using boost::mpl::identity;
+using mpllibs::metamonad::tmp_tag;
 
 namespace
 {
-  MPLLIBS_DEFINE_TAG(test_tag)
+  struct test_tag : tmp_tag<test_tag> {};
 }
 
 namespace mpllibs
@@ -31,13 +32,7 @@ namespace mpllibs
     template <>
     struct monad<test_tag> : monad_defaults<test_tag>
     {
-      struct return_
-      {
-        typedef return_ type;
-        
-        template <class T>
-        struct apply : identity<int13> {};
-      };
+      typedef lambda_c<_, returns<int13> > return_;
       
       // no bind is needed for this test
     };

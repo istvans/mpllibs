@@ -19,9 +19,11 @@
 
 #include <mpllibs/metaparse/build_parser.hpp>
 
-#include <mpllibs/metamonad/do_try.hpp>
-#include <mpllibs/metamonad/tag_tag.hpp>
-#include <mpllibs/metamonad/meta_atom.hpp>
+#include <mpllibs/metamonad/do_c.hpp>
+#include <mpllibs/metamonad/exception.hpp>
+#include <mpllibs/metamonad/tmp_tag.hpp>
+#include <mpllibs/metamonad/tmp_value.hpp>
+#include <mpllibs/metamonad/name.hpp>
 
 #include <mpllibs/metatest/to_stream.hpp>
 
@@ -54,9 +56,12 @@ using mpllibs::metaparse::entire_input;
 
 using mpllibs::metatest::to_stream;
 
-using mpllibs::metamonad::do_try;
-using mpllibs::metamonad::throw_;
+using mpllibs::metamonad::do_c;
+using mpllibs::metamonad::exception;
+using mpllibs::metamonad::exception_tag;
 using mpllibs::metamonad::set;
+using mpllibs::metamonad::tmp_tag;
+using mpllibs::metamonad::tmp_value;
 
 using boost::mpl::apply_wrap1;
 using boost::mpl::fold;
@@ -70,6 +75,8 @@ using boost::mpl::eval_if;
 using boost::mpl::bool_;
 using boost::mpl::equal_to;
 using boost::mpl::bool_;
+
+using namespace mpllibs::metamonad::name;
 
 /*
  * The grammar
@@ -86,13 +93,8 @@ typedef token<lit_c<'/'> > div_token;
  
 typedef token<int_> int_token;
 
-struct x;
-
-MPLLIBS_DEFINE_TAG(division_by_zero_tag)
-MPLLIBS_DEFINE_META_ATOM(division_by_zero_tag, division_by_zero)
-
-struct new_value;
-struct state;
+struct division_by_zero_tag : tmp_tag<division_by_zero_tag> {};
+struct division_by_zero : tmp_value<division_by_zero, division_by_zero_tag> {};
 
 template <class T, char C>
 struct is_c : bool_<T::type::value == C> {};
@@ -101,14 +103,11 @@ struct eval_plus
 {
   template <class C, class State>
   struct apply :
-    do_try<
-      set<state, State>,
-      set<new_value, back<C> >,
-      eval_if<
-        is_c<front<C>, '+'>,
-        plus<state, new_value>,
-        minus<state, new_value>
-      >
+    do_c<
+      exception_tag,
+      set<s, State>,
+      set<v, back<C> >,
+      eval_if<is_c<front<C>, '+'>, plus<s, v>, minus<s, v> >
     >
   {};
 };
@@ -119,16 +118,17 @@ struct eval_mult
 {
   template <class C, class State>
   struct apply :
-    do_try<
-      set<state, State>,
-      set<new_value, back<C> >,
+    do_c<
+      exception_tag,
+      set<s, State>,
+      set<v, back<C> >,
       eval_if<
         is_c<front<C>, '*'>,
-        times<state, new_value>,
+        times<s, v>,
         eval_if<
-          equal_to<new_value, boost::mpl::int_<0> >,
-          throw_<division_by_zero>,
-          divides<state, new_value>
+          equal_to<v, boost::mpl::int_<0> >,
+          exception<division_by_zero>,
+          divides<s, v>
         >
       >
     >

@@ -6,70 +6,139 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mpllibs/metamonad/util/id.hpp>
+#include <mpllibs/metamonad/make_monadic.hpp>
+#include <mpllibs/metamonad/exception.hpp>
+#include <mpllibs/metamonad/eval_case.hpp>
+#include <mpllibs/metamonad/name.hpp>
+#include <mpllibs/metamonad/lambda_c.hpp>
+#include <mpllibs/metamonad/lazy.hpp>
+#include <mpllibs/metamonad/lazy_protect_args.hpp>
+#include <mpllibs/metamonad/eval_let.hpp>
+#include <mpllibs/metamonad/syntax.hpp>
+#include <mpllibs/metamonad/var.hpp>
+#include <mpllibs/metamonad/if.hpp>
 
-#include <mpllibs/metamonad/do_try.hpp>
-#include <mpllibs/metamonad/do.hpp>
+#include <boost/mpl/apply.hpp>
+#include <boost/mpl/fold.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/pair.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/apply_wrap.hpp>
 
-#include <boost/preprocessor/repetition.hpp>
-#include <boost/preprocessor/comma_if.hpp>
-#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/type_traits.hpp>
+
+#include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
 namespace mpllibs
 {
   namespace metamonad
   {
-    #ifdef MPLLIBS_DEFINE_NAME
-      #error MPLLIBS_DEFINE_NAME already defined
-    #endif
-    #define MPLLIBS_DEFINE_NAME(z, n, unused) \
-      struct t##n;
+    struct try_a_;
+    struct try_e_;
+    struct try_s_;
 
-    BOOST_PP_REPEAT(MPLLIBS_DO_MAX_ARGUMENT, MPLLIBS_DEFINE_NAME, ~)
-    
-    #undef MPLLBIS_DEFINE_NAME
-  
-    template <class F>
-    struct try_ : do_try<F> {};
-    
-    #ifdef MPLLIBS_CLASS
-      #error MPLLIBS_CLASS already defined
-    #endif
-    #define MPLLIBS_CLASS(z, n, unused) \
-      BOOST_PP_COMMA_IF(n) class
-    
-    #ifdef MPLLIBS_SET_T
-      #error MPLLIBS_SET_T already defined
-    #endif
-    #define MPLLIBS_SET_T(z, n, unused) \
-      BOOST_PP_COMMA_IF(n) mpllibs::metamonad::set<t##n, T##n>
-    
-    #ifdef MPLLIBS_TRY_CASE
-      #error MPLLIBS_TRY_CASE already defined
-    #endif
-    #define MPLLIBS_TRY_CASE(z, n, unused) \
-      template <  \
-        template <BOOST_PP_REPEAT(n, MPLLIBS_CLASS, ~)> class F, \
-        BOOST_PP_ENUM_PARAMS(n, class T) \
-      > \
-      struct try_<F<BOOST_PP_ENUM_PARAMS(n, T)> > : \
-        do_try< \
-          BOOST_PP_REPEAT(n, MPLLIBS_SET_T, ~) \
-          BOOST_PP_COMMA_IF(n) \
-          F<BOOST_PP_ENUM_PARAMS(n, t)> \
-        > \
+    typedef var<try_a_> try_a;
+    typedef var<try_e_> try_e;
+    typedef var<try_s_> try_s;
+
+    template <class Name, class Pred, class Body>
+    struct catch_ : tmp_value<catch_<Name, Pred, Body> > {};
+
+    template <class Name, class Pred, class Body>
+    struct catch_c : tmp_value<catch_c<Name, Pred, Body> > {};
+
+    namespace impl
+    {
+      template <class E, class N, class Pred, class Body>
+      struct handle_catch_impl :
+        if_<
+          eval_let<N, syntax<E>, Pred>,
+          lazy<
+            boost::mpl::pair<
+              boost::mpl::false_,
+              already_lazy<eval_let<N, syntax<E>, Body> >
+            >
+          >,
+          boost::mpl::pair<boost::mpl::true_, exception<E> >
+        >
       {};
-    
-    BOOST_PP_REPEAT_FROM_TO(
-      1,
-      BOOST_PP_SUB(MPLLIBS_DO_MAX_ARGUMENT, 1),
-      MPLLIBS_TRY_CASE,
-      ~
-    )
-    
-    #undef MPLLIBS_SET_T
-    #undef MPLLIBS_TRY_CASE
-    #undef MPLLIBS_CLASS
+
+      template <class E, class Catch>
+      struct handle_catch;
+
+      template <class E, class N, class Pred, class Body>
+      struct handle_catch<E, catch_c<N, Pred, Body> > :
+        handle_catch_impl<
+          typename E::type,
+          typename N::type,
+          syntax<Pred>,
+          syntax<Body>
+        >
+      {};
+
+      template <class E, class N, class Pred, class Body>
+      struct handle_catch<E, catch_<N, Pred, Body> > :
+        handle_catch_impl<
+          typename E::type,
+          typename N::type,
+          typename Pred::type,
+          typename Body::type
+        >
+      {};
+    }
+
+    template <
+      class Expr, 
+      BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
+        BOOST_MPL_LIMIT_METAFUNCTION_ARITY,
+        class Catch,
+        boost::mpl::na
+      )
+    >
+    struct try_ :
+      eval_case<
+        make_monadic<exception_tag, Expr>,
+        matches_c<
+          exception<try_e>,
+          lazy<
+            boost::mpl::second<
+              lazy_protect_args<
+                boost::mpl::fold<
+                  boost::mpl::vector<
+                    BOOST_PP_ENUM_PARAMS(
+                      BOOST_MPL_LIMIT_METAFUNCTION_ARITY,
+                      Catch
+                    )
+                  >,
+                  boost::mpl::pair<boost::mpl::true_, exception<try_e> >,
+                  lambda_c<try_s, try_a,
+                    eval_case<
+                      try_s,
+                      matches_c<
+                        boost::mpl::pair<boost::mpl::true_, _>,
+                        impl::handle_catch<try_e, try_a>
+                      >,
+                      matches_c<boost::mpl::pair<boost::mpl::false_, _>, try_s>
+                    >
+                  >
+                >
+              >
+            >
+          >
+        >,
+        matches_c<_, make_monadic<exception_tag, Expr> >
+      >
+    {};
+
+    namespace impl
+    {
+      // Protection against let
+      template <class A, class E1, class Pred, class Body>
+      struct let_impl<A, E1, catch_<A, Pred, Body> > : catch_<A, Pred, Body> {};
+
+      template <class A, class E1, class Pred, class Body>
+      struct let_impl<A, E1, catch_c<A, Pred, Body> >:catch_c<A, Pred, Body> {};
+    }
   }
 }
 

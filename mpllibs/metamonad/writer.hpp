@@ -8,12 +8,13 @@
 
 #include <mpllibs/metamonad/monad.hpp>
 #include <mpllibs/metamonad/monoid.hpp>
-#include <mpllibs/metamonad/tag_tag.hpp>
+#include <mpllibs/metamonad/lazy.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
+#include <mpllibs/metamonad/name.hpp>
+#include <mpllibs/metamonad/mappend.hpp>
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
-#include <boost/mpl/always.hpp>
-#include <boost/mpl/apply.hpp>
 #include <boost/mpl/pair.hpp>
 
 namespace mpllibs
@@ -26,41 +27,38 @@ namespace mpllibs
     template <class M>
     struct monad<writer_tag<M> > : monad_defaults<writer_tag<M> >
     {
-      struct return_
-      {
-        typedef return_ type;
-        
-        template <class T>
-        struct apply
-        {
-          typedef boost::mpl::pair<T, typename monoid<M>::empty> type;
-        };
-      };
-      
-      struct bind
-      {
-        template <class A, class F>
-        struct apply
-        {
-        private:
-          typedef
-            typename boost::mpl::apply<F, typename A::first>::type
-            FA_first;
-        public:
-          typedef
+      typedef
+        lambda_c<t,
+          lazy<
+            boost::mpl::pair<already_lazy<t>, mpllibs::metamonad::mempty<M> >
+          >
+        >
+        return_;
+
+      typedef
+        lambda_c<a, f,
+          lazy<
             boost::mpl::pair<
-              typename FA_first::first,
-              typename boost::mpl::apply<
-                typename monoid<M>::append,
-                typename A::second,
-                typename FA_first::second
-              >::type
+              boost::mpl::first<
+                boost::mpl::apply_wrap1<
+                  boost::mpl::lambda<f>,
+                  boost::mpl::first<a>
+                >
+              >,
+              mpllibs::metamonad::mappend<
+                already_lazy<M>,
+                boost::mpl::second<a>,
+                boost::mpl::second<
+                  boost::mpl::apply_wrap1<
+                    boost::mpl::lambda<f>,
+                    boost::mpl::first<a>
+                  >
+                >
+              >
             >
-            type;
-        };
-        
-        typedef bind type;
-      };
+          >
+        >
+        bind;
     };
   }
 }

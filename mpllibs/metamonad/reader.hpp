@@ -7,58 +7,44 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mpllibs/metamonad/monad.hpp>
-#include <mpllibs/metamonad/tag_tag.hpp>
+#include <mpllibs/metamonad/tmp_tag.hpp>
+#include <mpllibs/metamonad/lazy.hpp>
+#include <mpllibs/metamonad/already_lazy.hpp>
+#include <mpllibs/metamonad/lazy_protect_args.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
+#include <mpllibs/metamonad/name.hpp>
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
-#include <boost/mpl/always.hpp>
-#include <boost/mpl/apply.hpp>
+#include <boost/mpl/apply_wrap.hpp>
 
 namespace mpllibs
 {
   namespace metamonad
   {
-    MPLLIBS_DEFINE_TAG(reader_tag)
+    struct reader_tag : tmp_tag<reader_tag> {};
     
     template <>
     struct monad<reader_tag> : monad_defaults<reader_tag>
     {
-      struct return_
-      {
-        typedef return_ type;
-        
-        template <class T>
-        struct apply
-        {
-          typedef boost::mpl::always<T> type;
-        };
-      };
+      typedef lambda_c<t, _, t> return_;
       
-      struct bind
-      {
-      private:
-        template <class A, class F>
-        struct impl
-        {
-          typedef impl type;
-          
-          template <class R>
-          struct apply :
-            boost::mpl::apply<
-              typename boost::mpl::apply<
-                F,
-                typename boost::mpl::apply<A, R>::type
-              >::type,
-              R
+      typedef
+        lambda_c<a, f, r,
+          lazy<
+            boost::mpl::apply_wrap1<
+              boost::mpl::apply_wrap1<
+                boost::mpl::lambda<lazy_protect_args<f> >,
+                boost::mpl::apply_wrap1<
+                  boost::mpl::lambda<lazy_protect_args<a> >,
+                  already_lazy<r>
+                >
+              >,
+              already_lazy<r>
             >
-          {};
-        };
-      public:
-        template <class A, class F>
-        struct apply : impl<A, F> {};
-        
-        typedef bind type;
-      };
+          >
+        >
+        bind;
     };
   }
 }

@@ -6,6 +6,10 @@
 #define BOOST_TEST_DYN_LINK
 
 #include <mpllibs/metamonad/state.hpp>
+#include <mpllibs/metamonad/tmp_value.hpp>
+#include <mpllibs/metamonad/lazy.hpp>
+#include <mpllibs/metamonad/lambda_c.hpp>
+#include <mpllibs/metamonad/name.hpp>
 
 #include <mpllibs/metatest/boost_test.hpp>
 #include <boost/test/unit_test.hpp>
@@ -18,31 +22,18 @@
 #include "common.hpp"
 
 using boost::mpl::plus;
+using boost::mpl::pair;
+
+using mpllibs::metamonad::tmp_value;
+using mpllibs::metamonad::lazy;
+using mpllibs::metamonad::lambda_c;
+
+using namespace mpllibs::metamonad::name;
 
 namespace
 {
-  template <class N>
-  struct plusn
-  {
-    typedef plusn type;
-
-    template <class A>
-    struct apply
-    {
-    private:
-      struct impl
-      {
-        typedef impl type;
-  
-        template <class S>
-        struct apply :
-          boost::mpl::pair<typename plus<A, N>::type, typename plus<S, N>::type>
-        {};
-      };
-    public:
-      typedef impl type;
-    };
-  };
+  MPLLIBS_METAFUNCTION(plusn, (N))
+  ((lambda_c<a, b, lazy<pair<plus<a, N>, plus<b, N> > > >));
 }
 
 BOOST_AUTO_TEST_CASE(test_state)

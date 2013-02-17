@@ -8,22 +8,20 @@
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
+#include <mpllibs/metamonad/metafunction.hpp>
+#include <mpllibs/metamonad/returns.hpp>
+
 namespace mpllibs
 {
   namespace metamonad
   {
-    // Not defined. Using it outside of lazy is an error.
-    template <class AnglyExpr>
-    struct lazy_argument;
+    MPLLIBS_METAFUNCTION(lazy_argument, (AnglyExpr)) ((AnglyExpr));
 
     template <class AnglyExpr>
     struct lazy;
 
     template <class AnglyExpr>
-    struct lazy<lazy_argument<AnglyExpr> >
-    {
-      typedef lazy<AnglyExpr> type;
-    };
+    struct lazy<lazy_argument<AnglyExpr> > : returns<lazy<AnglyExpr> > {};
 
   }
 }

@@ -7,11 +7,17 @@
 
 #include <mpllibs/metamonad/return_.hpp>
 #include <mpllibs/metamonad/bind.hpp>
+#include <mpllibs/metamonad/tmp_value.hpp>
+#include <mpllibs/metamonad/lambda_c.hpp>
+#include <mpllibs/metamonad/name.hpp>
+#include <mpllibs/metamonad/lazy.hpp>
+#include <mpllibs/metamonad/lazy_protect_args.hpp>
+#include <mpllibs/metamonad/either.hpp>
 
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/apply.hpp>
-#include <boost/mpl/identity.hpp>
+#include <boost/mpl/tag.hpp>
 
 #include <boost/static_assert.hpp>
 
@@ -23,15 +29,18 @@
 #include <iostream>
 
 using boost::mpl::minus;
+
+using mpllibs::metamonad::tmp_value;
+using mpllibs::metamonad::lazy;
+using mpllibs::metamonad::lazy_protect_args;
+using mpllibs::metamonad::lambda_c;
+using mpllibs::metamonad::right;
+
 namespace
 {
-  struct minus_2
-  {
-    typedef minus_2 type;
-  
-    template <class A>
-    struct apply : right<typename minus<typename A::value, int2>::type> {};
-  };
+  typedef
+    lambda_c<a, lazy<right<lazy_protect_args<minus<a, int2> > > > >
+    minus_2;
 }
 
 BOOST_AUTO_TEST_CASE(test_monad)
@@ -39,9 +48,15 @@ BOOST_AUTO_TEST_CASE(test_monad)
   using mpllibs::metatest::meta_require;
 
   using boost::mpl::equal_to;
+  using boost::mpl::tag;
   
   using mpllibs::metamonad::return_;
   using mpllibs::metamonad::bind;
+  using mpllibs::metamonad::left;
+  using mpllibs::metamonad::either_tag;
+
+  typedef tag<int13>::type int_tag;
+  typedef either_tag<int_tag, int_tag> either;
 
   meta_require<
     equal_to<right<int13>, return_<either, int13>::type>
