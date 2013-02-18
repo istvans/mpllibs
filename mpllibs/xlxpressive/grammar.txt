@@ -16,6 +16,10 @@ Possible scenarios:
 reg_exp ::= seq ('|' seq)*
 seq ::= unary_item*
 unary_item ::= item (('*'|'+'|'?'|repeat) '?'?)?
+item ::= (bos|eos|any|bracket_exp|bschar|group|char|number)
+bos ::= '^'
+eos ::= '$'
+any ::= '.'
 repeat ::= '{' number ',' number '}'
 bracket_exp ::= '(' (reg_exp|qexp) ')'
 qexp ::= '?' (icase|keep|before|not_before|after|not_after|mark_tag_create|mark_tag_use) reg_exp
@@ -27,8 +31,10 @@ after            ::= '<' '='
 not_after        ::= '<' '!'
 mark_tag_create  ::= 'P' '<' name '>'
 mark_tag_use     ::= 'P' '=' name
-name             ::= char*
-any ::= '.'
+name             ::= letter*
+letter ::=
+('A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z')
+number ::= ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')
 bschar ::= '\' (bs_backslash|bs_back_ref|bs_boundary|bs_digit|bs_word|bs_space|bs_new_line)
 bs_backslash ::= '\'
 bs_back_ref  ::= number
@@ -43,7 +49,7 @@ not_bs_space ::= 'S'
 bs_new_line  ::= ('r'? '\' 'n'|'n')
 group ::= '[' (char_group|'^'? set)
 set ::= (item|range)* ']'
-range ::= (number '-' number|char '-' char)
+range ::= (number '-' number|letter '-' letter)
 char_group ::= ':' (a|b|c|d|g|l|p|s|u|x|set)
 a      ::= 'a' (lnp|set)
 lnp      ::= 'l' (n|ph|set)
@@ -127,7 +133,4 @@ it2    ::= 'i' (t02|set)
 t02    ::= 't' (chg12|set)
 chg12  ::= ':' (xdigit|set)
 xdigit ::= ']'
-char ::= 
-number ::= ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')
-item ::= 
 
