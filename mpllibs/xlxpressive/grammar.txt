@@ -16,11 +16,11 @@ Possible scenarios:
 reg_exp ::= seq ('|' seq)*
 seq ::= unary_item*
 unary_item ::= item (('*'|'+'|'?'|repeat) '?'?)?
+repeat ::= '{' number ',' number '}'
 item ::= (bos|eos|any|bracket_exp|bschar|group|char|number)
 bos ::= '^'
 eos ::= '$'
 any ::= '.'
-repeat ::= '{' number ',' number '}'
 bracket_exp ::= '(' (reg_exp|qexp) ')'
 qexp ::= '?' (icase|keep|before|not_before|after|not_after|mark_tag_create|mark_tag_use) reg_exp
 icase            ::= 'i' ':'
