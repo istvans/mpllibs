@@ -1,7 +1,7 @@
 *.o
 *.d
 bin
-/index.html
+index.html
 /build.html
 website
 local.mk
