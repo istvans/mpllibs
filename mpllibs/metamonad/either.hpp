@@ -7,78 +7,37 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mpllibs/metamonad/monad.hpp>
-#include <mpllibs/metamonad/left.hpp>
-#include <mpllibs/metamonad/right.hpp>
-#include <mpllibs/metamonad/is_left.hpp>
-#include <mpllibs/metamonad/tag_tag.hpp>
-#include <mpllibs/metamonad/get_data.hpp>
+#include <mpllibs/metamonad/data.hpp>
+#include <mpllibs/metamonad/eval_case.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
+#include <mpllibs/metamonad/name.hpp>
 
-#include <mpllibs/metatest/to_stream_fwd.hpp>
-
-#include <boost/mpl/identity.hpp>
-#include <boost/mpl/if.hpp>
 #include <boost/mpl/apply.hpp>
 
 namespace mpllibs
 {
   namespace metamonad
   {
-    MPLLIBS_DEFINE_TAG(either_tag)
+    MPLLIBS_DATA(either, 2, ((left, 1))((right, 1)));
     
-    template <>
-    struct monad<either_tag> : monad_defaults<either_tag>
+    template <class L, class R>
+    struct monad<either_tag<L, R> > : monad_defaults<either_tag<L, R> >
     {
-      struct return_
-      {
-        typedef return_ type;
-        
-        template <class T>
-        struct apply : right<T> {};
-      };
+      typedef lambda_c<t, right<t> > return_;
       
-      struct bind
-      {
-      private:
-        template <class A, class F>
-        struct call_F : boost::mpl::apply<F, typename get_data<A>::type> {};
-      public:
-        template <class A, class F>
-        struct apply :
-          boost::mpl::if_<
-            is_left<A>,
-            boost::mpl::identity<A>,
-            call_F<A, F>
-          >::type
-        {};
-        
-        typedef bind type;
-      };
+      typedef
+        lambda_c<a, f,
+          eval_case< a,
+            matches_c<left<_>,  a>,
+            matches_c<right<x>, boost::mpl::apply<f, x> >
+          >
+        >
+        bind;
 
-      struct fail
-      {
-        typedef fail type;
-        
-        template <class S>
-        struct apply : left<S> {};
-      };
+      typedef lambda_c<t, left<t> > fail;
     };
   }
 }
-
-MPLLIBS_DEFINE_TO_STREAM_FOR_TYPE(
-  mpllibs::metamonad::monad<mpllibs::metamonad::either_tag>::bind,
-  "monad<either_tag>::bind"
-)
-
-MPLLIBS_DEFINE_TO_STREAM_FOR_TYPE(
-  mpllibs::metamonad::monad<mpllibs::metamonad::either_tag>::fail,
-  "monad<either_tag>::fail"
-)
-
-MPLLIBS_DEFINE_TO_STREAM_FOR_TYPE(
-  mpllibs::metamonad::monad<mpllibs::metamonad::either_tag>::return_,
-  "monad<either_tag>::return_"
-)
 
 #endif
 

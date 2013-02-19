@@ -7,14 +7,14 @@
 
 #include <mpllibs/metamonad/exception.hpp>
 #include <mpllibs/metamonad/do.hpp>
-#include <mpllibs/metamonad/get_data.hpp>
+#include <mpllibs/metamonad/name.hpp>
+#include <mpllibs/metamonad/lambda_c.hpp>
 
 #include <mpllibs/metatest/boost_test.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/always.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/apply_wrap.hpp>
@@ -23,11 +23,6 @@
 
 #include "common.hpp"
 
-namespace
-{
-  struct x;
-}
-
 BOOST_AUTO_TEST_CASE(test_exception)
 {
   using mpllibs::metatest::meta_require;
@@ -35,28 +30,29 @@ BOOST_AUTO_TEST_CASE(test_exception)
   using boost::is_same;
   
   using boost::mpl::equal_to;
-  using boost::mpl::always;
   using boost::mpl::apply;
   using boost::mpl::apply_wrap1;
   using boost::mpl::tag;
   using boost::mpl::not_;
   
   using mpllibs::metamonad::exception;
-  using mpllibs::metamonad::get_data;
   using mpllibs::metamonad::exception_monad;
   using mpllibs::metamonad::return_;
   using mpllibs::metamonad::do_;
+  using mpllibs::metamonad::do_c;
   using mpllibs::metamonad::set;
   using mpllibs::metamonad::do_return;
+  using mpllibs::metamonad::lambda_c;
+  using mpllibs::metamonad::_;
+
+  using mpllibs::metamonad::name::x;
 
   typedef exception<int13> e;
-
-  typedef equal_to<int13, get_data<e>::type> test_get_data;
 
   meta_require<
     equal_to<
       int13,
-      do_<exception_monad>::apply<
+      do_c<exception_monad,
         do_return<int13>
       >::type
     >
@@ -64,24 +60,18 @@ BOOST_AUTO_TEST_CASE(test_exception)
 
   meta_require<
     equal_to<
-      int13,
-      get_data<
-        do_<exception_monad>::apply<
-          apply_wrap1<always<e>, int>
-        >::type
-      >::type
+      exception<int13>,
+      do_c<exception_monad, apply_wrap1<lambda_c<_, e>, int> >::type
     >
   >(MPLLIBS_HERE, "test_monadic_exception");
 
 
   meta_require<
     equal_to<
-      int13,
-      get_data<
-        do_<exception_monad>::apply<
-          apply_wrap1<always<e>, int>,
-          do_return<int13>
-        >::type
+      exception<int13>,
+      do_c<exception_monad,
+        apply_wrap1<lambda_c<_, e>, int>,
+        do_return<int13>
       >::type
     >
   >(MPLLIBS_HERE, "test_exception_propagation");
@@ -94,7 +84,7 @@ BOOST_AUTO_TEST_CASE(test_exception)
   meta_require<
     is_same<
       int11,
-      do_<exception_monad>::apply<
+      do_c<exception_monad,
         do_return<int11>
       >::type
     >
@@ -103,21 +93,19 @@ BOOST_AUTO_TEST_CASE(test_exception)
   meta_require<
     equal_to<
       int11,
-        do_<exception_monad>::apply<
-          do_return<int13>,
-          do_return<int11>
-        >::type
+      do_c<exception_monad,
+        do_return<int13>,
+        do_return<int11>
+      >::type
     >
   >(MPLLIBS_HERE, "test_execution_sequence");
   
   meta_require<
     equal_to<
-      int13,
-      get_data<
-        do_<exception_monad>::apply<
-          set<x, apply_wrap1<always<e>, int> >,
-          do_return<int13>
-        >::type
+      exception<int13>,
+      do_c<exception_monad,
+        set<x, apply_wrap1<lambda_c<_, e>, int> >,
+        do_return<int13>
       >::type
     >
   >(MPLLIBS_HERE, "test_exception_in_set");

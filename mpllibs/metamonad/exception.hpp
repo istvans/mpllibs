@@ -7,36 +7,19 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mpllibs/metamonad/exception_core.hpp>
-#include <mpllibs/metamonad/get_data.hpp>
 #include <mpllibs/metamonad/monad.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
+#include <mpllibs/metamonad/name.hpp>
+#include <mpllibs/metamonad/eval_case.hpp>
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
 #include <boost/mpl/apply.hpp>
-#include <boost/mpl/tag.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/identity.hpp>
-
-#include <boost/type_traits/is_same.hpp>
-
-#include <iostream>
 
 namespace mpllibs
 {
   namespace metamonad
   {
-    template <>
-    struct get_data_impl<exception_tag>
-    {
-      template <class E>
-      struct apply
-      {
-        typedef typename E::data type;
-      };
-    };
-
     /*
      * The Exception monad
      * This is modeled along the Either monad of Haskell
@@ -51,71 +34,23 @@ namespace mpllibs
     /*
      * return
      */
+    template <class Tag>
+    struct monad;
+
     template <>
     struct monad<exception_tag> : monad_defaults<exception_tag>
     {
-      struct return_
-      {
-        typedef return_ type;
-        
-        template <class T>
-        struct apply
-        {
-          typedef T type;
-        };
-      };
+      typedef lambda_c<t, t> return_;
       
-      struct bind
-      {
-        typedef bind type;
-
-        template <class A, class F>
-        struct apply :
-          boost::mpl::if_<
-            boost::is_same<exception_tag, typename boost::mpl::tag<A>::type>,
-            boost::mpl::identity<A>,
-            boost::mpl::apply1<F, A>
-          >::type
-        {};
-      };
-    };
-  }
-}
-
-namespace boost
-{
-  namespace mpl
-  {
-    template <class A, class B>
-    struct equal_to_impl;
-
-    template <>
-    struct
-      equal_to_impl<
-        mpllibs::metamonad::exception_tag,
-        mpllibs::metamonad::exception_tag
-      >
-    {
-      template <class A, class B>
-      struct apply :
-        equal_to<
-          typename mpllibs::metamonad::get_data<A>::type,
-          typename mpllibs::metamonad::get_data<B>::type
+      typedef
+        lambda_c<a, f,
+          eval_case< a,
+            matches_c<exception<_>, a>,
+            matches_c<_, boost::mpl::apply1<f, a> >
+          >
         >
-      {};
+        bind;
     };
-
-    template <class T>
-    struct equal_to_impl<mpllibs::metamonad::exception_tag, T>
-    {
-      template <class A, class B>
-      struct apply : boost::mpl::false_ {};
-    };
-
-    template <class T>
-    struct equal_to_impl<T, mpllibs::metamonad::exception_tag> :
-      equal_to_impl<mpllibs::metamonad::exception_tag, T>
-    {};
   }
 }
 

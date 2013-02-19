@@ -7,6 +7,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mpllibs/metamonad/let.hpp>
+#include <mpllibs/metamonad/eval_syntax.hpp>
+#include <mpllibs/metamonad/returns.hpp>
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
@@ -15,8 +17,15 @@ namespace mpllibs
   namespace metamonad
   {
     template <class A, class E1, class E2>
-    struct letrec : let<A, letrec<A, E1, E1>, E2>
-    {};
+    struct letrec : let<A, syntax<eval_syntax<letrec<A, E1, E1> > >, E2> {};
+
+    namespace impl
+    {
+      template <class A, class E1a, class E1b, class E2>
+      struct let_impl<A, E1a, letrec<A, E1b, E2> > :
+        returns<letrec<A, E1b, E2> >
+      {};
+    }
   }
 }
 

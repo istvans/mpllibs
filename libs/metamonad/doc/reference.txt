@@ -7,38 +7,159 @@ mpllibs::metamonad refrence
 ===========================
 Abel Sinkovics
 
-Let expressions
----------------
+Language elements
+-----------------
 
+Syntax
+~~~~~~
+
+link:eval_syntax.html[eval_syntax] +
+link:make_syntax.html[make_syntax] +
+link:name.html[name] +
+link:syntax.html[syntax] +
+link:var.html[var] +
+
+Control structure
+~~~~~~~~~~~~~~~~~
+
+link:case_.html[case_] +
+link:eval_case.html[eval_case] +
+link:if_.html[if_] +
+
+Pattern matching
+~~~~~~~~~~~~~~~~
+
+link:match.html[match] +
+link:match_c.html[match_c] +
+
+Let expression
+~~~~~~~~~~~~~~
+
+link:eval_let.html[eval_let] +
+link:eval_let_c.html[eval_let_c] +
+link:eval_letrec.html[eval_letrec] +
+link:eval_letrec_c.html[eval_letrec_c] +
+link:eval_match_let.html[eval_match_let] +
+link:eval_match_let_c.html[eval_match_let_c] +
+link:eval_multi_let.html[eval_multi_let] +
+link:eval_multi_let_c.html[eval_multi_let_c] +
 link:let.html[let] +
+link:let_c.html[let_c] +
 link:letrec.html[letrec] +
+link:letrec_c.html[letrec_c] +
+link:match_let.html[match_let] +
+link:match_let_c.html[match_let_c] +
+link:multi_let.html[multi_let] +
+link:multi_let_c.html[multi_let_c] +
 
 Lazy evaluation
----------------
+~~~~~~~~~~~~~~~
 
+link:already_lazy.html[already_lazy] +
+link:eval.html[eval] +
 link:lazy.html[lazy] +
+link:lazy_argument.html[lazy_argument] +
+link:lazy_protect_args.html[lazy_protect_args] +
 
-Lambda expressions
-------------------
+Lambda expression
+~~~~~~~~~~~~~~~~~
 
 link:lambda.html[lambda] +
+link:lambda_c.html[lambda_c] +
+
+Typeclass
+~~~~~~~~~
+
+link:MPLLIBS_TYPECLASS_EXPECT.html[MPLLIBS_TYPECLASS_EXPECT] +
+
+Do notation
+~~~~~~~~~~~
+
+link:do_.html[do_] +
+link:do_c.html[do_c] +
+link:set.html[set] +
+link:do_return.html[do_return] +
+
+Monadic conversion
+~~~~~~~~~~~~~~~~~~
+
+link:already_monadic.html[already_monadic] +
+link:make_monadic.html[make_monadic] +
+link:make_monadic_c.html[make_monadic_c] +
+
+Compile-time exception
+~~~~~~~~~~~~~~~~~~~~~~
+
+link:catch_all.html[catch_all] +
+link:catch_just.html[catch_just] +
+
+link:exception.html[exception] +
+link:is_exception.html[is_exception] +
+link:try_.html[try_] +
+link:try_c.html[try_c] +
+
+Algebraic data-type
+~~~~~~~~~~~~~~~~~~~
+
+link:MPLLIBS_DATA.html[MPLLIBS_DATA] +
+
+Metafunction definition
+~~~~~~~~~~~~~~~~~~~~~~~
+
+link:MPLLIBS_DEFINE_TD_METAFUNCTION.html[MPLLIBS_DEFINE_TAG_DISPATCHING_METAFUNCTION] +
+
+link:MPLLIBS_LAZY_METAFUNCTION.html[MPLLIBS_LAZY_METAFUNCTION] +
+link:MPLLIBS_METAFUNCTION.html[MPLLIBS_METAFUNCTION] +
+
+link:make_tmp_value.html[make_tmp_value] +
+link:returns.html[returns] +
+link:tmp_tag.html[tmp_tag] +
+link:tmp_value.html[tmp_value] +
+
+Data types
+----------
+
+Tag
+~~~
+
+link:tag_tag.html[tag_tag] +
+link:overloading_error_tag.html[overloading_error_tag] +
+
+Boxing
+~~~~~~
+
+link:box.html[box] +
+link:eval_guard.html[eval_guard] +
+link:unbox.html[unbox] +
+
+Maybe
+~~~~~
+
+link:maybe.html[maybe] +
+
+Either
+~~~~~~
+
+link:either.html[either] +
 
 Typeclasses
 -----------
 
-link:MPLLIBS_TYPECLASS_EXPECT.html[MPLLIBS_TYPECLASS_EXPECT] +
+Monoid
+~~~~~~
 
-Monoids
--------
-
+link:mappend.html[mappend] +
+link:mconcat.html[mconcat] +
+link:mempty.html[mempty] +
 link:monoid.html[monoid] +
 
-Monoids implemented by the library +
+Instances of Monoid +
 
 link:list_monoid.html[list monoid] +
+link:maybe_monoid.html[maybe monoid] +
 
-Monads
-------
+Monad
+~~~~~
 
 link:bind_.html[bind_] +
 link:bind.html[bind] +
@@ -46,7 +167,7 @@ link:fail.html[fail] +
 link:monad.html[monad] +
 link:return_.html[return_] +
 
-Monads implemented by the library +
+Instances of Monad +
 
 link:either_monad.html[either monad] +
 link:exception_monad.html[exception monad] +
@@ -56,49 +177,24 @@ link:reader_monad.html[reader monad] +
 link:state_monad.html[state monad] +
 link:writer_monad.html[writer monad] +
 
-Do notation
------------
+MonadPlus
+~~~~~~~~~
 
-link:do_.html[do_] +
-link:set.html[set] +
-link:do_return.html[do_return] +
+link:monad_plus.html[monad_plus] +
+link:mplus.html[mplus] +
+link:mzero.html[mzero] +
 
-Compile-time exceptions
------------------------
+Instances of MonadPlus +
 
-link:exception.html[exception] +
-link:get_data.html[get_data] +
-link:throw_.html[throw_] +
-link:do_try.html[do_try] +
-link:try_.html[try_] +
+link:maybe_monad_plus.html[maybe monad plus] +
+link:list_monad_plus.html[list monad plus] +
 
-Tags
-----
+Miscellaneous
+-------------
 
-link:tag_tag.html[tag_tag] +
-link:overloading_error_tag.html[overloading_error_tag] +
-
-Convenience functions and macros
---------------------------------
-
-link:MPLLIBS_DEFINE_TAG.html[MPLLIBS_DEFINE_TAG] +
-link:MPLLIBS_DEFINE_META_ATOM.html[MPLLIBS_DEFINE_META_ATOM] +
-link:MPLLIBS_DEFINE_METAFUNCTION.html[MPLLIBS_DEFINE_METAFUNCTION] +
-
-Maybe
------
-
-link:nothing.html[nothing] +
-link:just.html[just] +
-link:is_nothing.html[is_nothing] +
-
-Either
-------
-
-link:left.html[left] +
-link:right.html[right] +
-link:is_left.html[is_left] +
-link:is_right.html[is_right] +
+link:guard.html[guard] +
+link:instantiate.html[instantiate] +
+link:is_tag.html[is_tag] +
 
 include::copyright[]
 

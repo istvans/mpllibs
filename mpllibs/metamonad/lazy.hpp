@@ -8,7 +8,6 @@
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
-#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
 
 #include <boost/preprocessor/cat.hpp>
@@ -56,15 +55,8 @@ namespace mpllibs
     #undef MPLLIBS_METAMONAD_LAZY_REC
     #undef MPLLIBS_METAMONAD_LAZY_TEMPLATE
 
-    template <class C, class T, class F>
-    struct lazy<boost::mpl::eval_if<C, T, F> > :
-      boost::mpl::eval_if<typename lazy<C>::type, T, F>
-    {};
-
-    template <class C, class T, class F>
-    struct lazy<boost::mpl::if_<C, T, F> > :
-      boost::mpl::if_<typename lazy<C>::type, T, F>
-    {};
+    template <class Expr>
+    struct lazy<lazy<Expr> > : lazy<Expr> {};
   }
 }
 

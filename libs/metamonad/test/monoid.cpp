@@ -6,13 +6,17 @@
 #define BOOST_TEST_DYN_LINK
 
 #include <mpllibs/metamonad/monoid.hpp>
+#include <mpllibs/metamonad/tmp_tag.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
+#include <mpllibs/metamonad/name.hpp>
+
+#include <mpllibs/metamonad/mconcat.hpp>
 
 #include <mpllibs/metatest/boost_test.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include "common.hpp"
 
-#include <boost/mpl/lambda.hpp>
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/list_c.hpp>
 #include <boost/mpl/plus.hpp>
@@ -20,16 +24,20 @@
 #include <boost/mpl/apply.hpp>
 
 
-using boost::mpl::lambda;
 using boost::mpl::_1;
 using boost::mpl::_2;
 using boost::mpl::plus;
 using boost::mpl::times;
 
+using mpllibs::metamonad::tmp_tag;
+using mpllibs::metamonad::lambda;
+
+using namespace mpllibs::metamonad::name;
+
 namespace
 {
-  MPLLIBS_DEFINE_TAG(plus_tag)
-  MPLLIBS_DEFINE_TAG(mult_tag)
+  struct plus_tag : tmp_tag<plus_tag> {};
+  struct mult_tag : tmp_tag<mult_tag> {};
 }
 
 namespace mpllibs
@@ -39,15 +47,15 @@ namespace mpllibs
     template <>
     struct monoid<plus_tag> : monoid_defaults<plus_tag>
     {
-      typedef int0 empty;
-      typedef lambda<plus<_1, _2> > append;
+      typedef int0 mempty;
+      typedef lambda_c<a, b, plus<a, b> >::type mappend;
     };
 
     template <>
     struct monoid<mult_tag> : monoid_defaults<mult_tag>
     {
-      typedef int1 empty;
-      typedef lambda<times<_1, _2> > append;
+      typedef int1 mempty;
+      typedef lambda_c<a, b, times<a, b> >::type mappend;
     };
   }
 }
@@ -56,7 +64,7 @@ BOOST_AUTO_TEST_CASE(test_monoid)
 {  
   using mpllibs::metatest::meta_require;
 
-  using mpllibs::metamonad::monoid;
+  using mpllibs::metamonad::mconcat;
 
   using boost::mpl::equal_to;
   using boost::mpl::list_c;
@@ -64,17 +72,11 @@ BOOST_AUTO_TEST_CASE(test_monoid)
   using boost::mpl::int_;
 
   meta_require<
-    equal_to<
-      int13,
-      apply<monoid<plus_tag>::concat, list_c<int, 1, 2, 3, 4, 3> >::type
-    >
+    equal_to<int13, mconcat<plus_tag, list_c<int, 1, 2, 3, 4, 3> >::type>
   >(MPLLIBS_HERE, "test_concat_plus");
 
   meta_require<
-    equal_to<
-      int_<72>,
-      apply<monoid<mult_tag>::concat, list_c<int, 1, 2, 3, 4, 3> >::type
-    >
+    equal_to<int_<72>, mconcat<mult_tag, list_c<int, 1, 2, 3, 4, 3> >::type>
   >(MPLLIBS_HERE, "test_concat_mult");
 }
 

@@ -6,13 +6,11 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <mpllibs/metamonad/bind.hpp>
 #include <mpllibs/metamonad/typeclass.hpp>
-#include <mpllibs/metamonad/throw.hpp>
-
-#include <boost/mpl/apply_wrap.hpp>
-#include <boost/mpl/always.hpp>
-
-#include <iostream>
+#include <mpllibs/metamonad/exception_core.hpp>
+#include <mpllibs/metamonad/lambda_c.hpp>
+#include <mpllibs/metamonad/name.hpp>
 
 namespace mpllibs
 {
@@ -21,35 +19,19 @@ namespace mpllibs
     template <class Tag>
     struct monad
     {
-      MPLLIBS_TYPECLASS_EXPECT(return_)
-      MPLLIBS_TYPECLASS_EXPECT(bind)
-      MPLLIBS_TYPECLASS_EXPECT(bind_)
+      MPLLIBS_TYPECLASS_EXPECT(return_);
+      MPLLIBS_TYPECLASS_EXPECT(bind);
+      MPLLIBS_TYPECLASS_EXPECT(bind_);
     };
     
     template <class Tag>
     struct monad_defaults : monad<typeclass_expectations>
     {
-      struct bind_
-      {
-        typedef bind_ type;
-      
-        template <class A, class B>
-        struct apply :
-          boost::mpl::apply_wrap2<
-            typename monad<Tag>::bind,
-            A,
-            boost::mpl::always<B>
-          >
-        {};
-      };
+      typedef
+        lambda_c<a, b, mpllibs::metamonad::bind<Tag, a, lambda_c<s, b> > >
+        bind_;
 
-      struct fail
-      {
-        typedef fail type;
-      
-        template <class S>
-        struct apply : throw_<S> {};
-      };
+      typedef lambda_c<s, exception<s> > fail;
     };
   }
 }

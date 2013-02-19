@@ -8,22 +8,24 @@
 
 #include "less.hpp"
 
-#include <mpllibs/metamonad/throw.hpp>
-#include <mpllibs/metamonad/do_try.hpp>
+#include <mpllibs/metamonad/do_c.hpp>
+#include <mpllibs/metamonad/exception.hpp>
+#include <mpllibs/metamonad/name.hpp>
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
 #include <boost/mpl/apply_wrap.hpp>
 #include <boost/mpl/if.hpp>
 
-struct c;
+using mpllibs::metamonad::name::c;
 
 template <class TagA, class TagB>
 struct min_impl
 {
   template <class A, class B>
   struct apply :
-    mpllibs::metamonad::do_try<
+    mpllibs::metamonad::do_c<
+      mpllibs::metamonad::exception_tag,
       mpllibs::metamonad::set<c, less<A, B> >,
       boost::mpl::if_<c, A, B>
     >

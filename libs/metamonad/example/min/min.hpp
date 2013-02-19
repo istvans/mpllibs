@@ -8,8 +8,7 @@
 
 #include "less.hpp"
 
-#include <mpllibs/metamonad/throw.hpp>
-#include <mpllibs/metamonad/try.hpp>
+#include <mpllibs/metamonad/try_c.hpp>
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
@@ -21,7 +20,7 @@ struct min_impl
 {
   template <class A, class B>
   struct apply :
-    mpllibs::metamonad::try_<boost::mpl::if_<less<A, B>, A, B> >
+    mpllibs::metamonad::try_c<boost::mpl::if_<less<A, B>, A, B> >
   {};
 };
 

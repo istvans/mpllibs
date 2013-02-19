@@ -7,79 +7,80 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mpllibs/metamonad/list.hpp>
-#include <mpllibs/metamonad/tag_tag.hpp>
+#include <mpllibs/metamonad/tmp_tag.hpp>
 #include <mpllibs/metamonad/monad.hpp>
+#include <mpllibs/metamonad/monad_plus.hpp>
 #include <mpllibs/metamonad/monoid.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
+#include <mpllibs/metamonad/name.hpp>
+#include <mpllibs/metamonad/lazy.hpp>
+#include <mpllibs/metamonad/already_lazy.hpp>
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
 #include <boost/mpl/insert_range.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/end.hpp>
-#include <boost/mpl/transform.hpp>
-#include <boost/mpl/lambda.hpp>
 #include <boost/mpl/apply_wrap.hpp>
+#include <boost/mpl/transform_view.hpp>
 
 namespace mpllibs
 {
   namespace metamonad
   {
-    MPLLIBS_DEFINE_TAG(list_tag)
+    struct list_tag : tmp_tag<list_tag> {};
     
     namespace impl
     {
-      struct join_lists
-      {
-        template <class State, class NewList>
-        struct apply :
-          boost::mpl::insert_range<
-            State,
-            typename boost::mpl::end<State>::type,
-            NewList
+      typedef
+        lambda_c<a, b,
+          lazy<
+            boost::mpl::insert_range<
+              already_lazy<a>,
+              boost::mpl::end<already_lazy<a> >,
+              already_lazy<b>
+            >
           >
-        {};
-      };
+        >
+        join_lists;
     }
 
     template <>
     struct monad<list_tag> : monad_defaults<list_tag>
     {
-      struct return_
-      {
-        typedef return_ type;
-        
-        template <class T>
-        struct apply : boost::mpl::list<T> {};
-      };
+      typedef lambda_c<t, boost::mpl::list<t> > return_;
       
-      struct bind
-      {
-        typedef bind type;
-        
-        template <class A, class F>
-        struct apply :
+      typedef
+        lambda_c<a, f,
           boost::mpl::fold<
-            typename boost::mpl::transform<A, F>::type,
+            boost::mpl::transform_view<a, f>,
             boost::mpl::list<>,
             mpllibs::metamonad::impl::join_lists
           >
-        {};
-      };
+        >
+        bind;
     };
     
     template <>
     struct monoid<list_tag> : monoid_defaults<list_tag>
     {
-      typedef boost::mpl::list<> empty;
+      typedef boost::mpl::list<> mempty;
       typedef
-        boost::mpl::lambda<
+        lambda_c<a, b,
           boost::mpl::apply_wrap2<
             mpllibs::metamonad::impl::join_lists,
-            boost::mpl::_1,
-            boost::mpl::_2
+            a,
+            b
           >
         >
-        append;
+        mappend;
+    };
+
+    template <>
+    struct monad_plus<list_tag>
+    {
+      typedef monoid<list_tag>::mempty mzero;
+      typedef monoid<list_tag>::mappend mplus;
     };
   }
 }

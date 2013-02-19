@@ -6,77 +6,82 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mpllibs/metamonad/just.hpp>
-#include <mpllibs/metamonad/is_nothing.hpp>
-#include <mpllibs/metamonad/nothing.hpp>
-#include <mpllibs/metamonad/tag_tag.hpp>
-#include <mpllibs/metamonad/get_data.hpp>
+#include <mpllibs/metamonad/impl/maybe.hpp>
+
+#include <mpllibs/metamonad/mappend.hpp>
 #include <mpllibs/metamonad/monad.hpp>
+#include <mpllibs/metamonad/monad_plus.hpp>
+#include <mpllibs/metamonad/monoid.hpp>
+#include <mpllibs/metamonad/name.hpp>
+#include <mpllibs/metamonad/eval_case.hpp>
+#include <mpllibs/metamonad/lambda.hpp>
 
 #include <mpllibs/metatest/to_stream_fwd.hpp>
 
-#include <boost/mpl/identity.hpp>
-#include <boost/mpl/if.hpp>
 #include <boost/mpl/apply.hpp>
 
 namespace mpllibs
 {
   namespace metamonad
   {
-    MPLLIBS_DEFINE_TAG(maybe_tag)
-    
-    template <>
-    struct monad<maybe_tag> : monad_defaults<maybe_tag>
+    template <class T>
+    struct monad<maybe_tag<T> > : monad_defaults<maybe_tag<T> >
     {
-      struct return_
-      {
-        typedef return_ type;
-        
-        template <class T>
-        struct apply : just<T> {};
-      };
+      typedef lambda_c<x, just<x> > return_;
       
-      struct bind
-      {
-      private:
-        template <class A, class F>
-        struct call_F : boost::mpl::apply<F, typename get_data<A>::type> {};
-      public:
-        template <class A, class F>
-        struct apply :
-          boost::mpl::if_<
-            is_nothing<A>,
-            boost::mpl::identity<A>,
-            call_F<A, F>
-          >::type
-        {};
-        typedef bind type;
-      };
+      typedef
+        lambda_c<a, f,
+          eval_case< a,
+            matches_c<nothing, a>,
+            matches_c<just<x>, boost::mpl::apply<f, x> >
+          >
+        >
+        bind;
 
-      struct fail
-      {
-        typedef return_ type;
-        
-        template <class S>
-        struct apply : nothing {};
-      };
+      typedef lambda_c<_, nothing> fail;
+    };
+
+    template <class T>
+    struct monad_plus<maybe_tag<T> >
+    {
+      typedef nothing mzero;
+
+      typedef
+        lambda_c<a, b,
+          eval_case< a,
+            matches_c<nothing, b>,
+            matches_c<_,       a>
+          >
+        >
+        mplus;
+    };
+
+    template <class T>
+    struct monoid<maybe_tag<T> > : monoid_defaults<maybe_tag<T> >
+    {
+      typedef nothing mempty;
+
+      typedef
+        lambda_c<a, b,
+          eval_case< a,
+            matches_c<nothing, b>,
+            matches_c<just<c>,
+              eval_case< b,
+                matches_c<nothing, a>,
+                matches_c<just<d>, just<mpllibs::metamonad::mappend<T, c, d> > >
+              >
+            >
+          >
+        >
+        mappend;
     };
   }
 }
 
-MPLLIBS_DEFINE_TO_STREAM_FOR_TYPE(
-  mpllibs::metamonad::monad<mpllibs::metamonad::maybe_tag>::bind,
-  "monad<maybe_tag>::bind"
-)
-
-MPLLIBS_DEFINE_TO_STREAM_FOR_TYPE(
-  mpllibs::metamonad::monad<mpllibs::metamonad::maybe_tag>::fail,
-  "monad<maybe_tag>::fail"
-)
-
-MPLLIBS_DEFINE_TO_STREAM_FOR_TYPE(
-  mpllibs::metamonad::monad<mpllibs::metamonad::maybe_tag>::return_,
-  "monad<maybe_tag>::return_"
+MPLLIBS_DEFINE_TO_STREAM_FOR_TEMPLATE(
+  1,
+  mpllibs::metamonad::maybe_tag,
+  "maybe_tag"
 )
 
 #endif
