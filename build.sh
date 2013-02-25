@@ -10,4 +10,5 @@ cmake .. \
 
 export LD_LIBRARY_PATH=$BOOST_ROOT/lib
 make $*
+make test
 
