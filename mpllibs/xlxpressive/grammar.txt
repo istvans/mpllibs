@@ -19,25 +19,25 @@ clause matches the others aren't evaluated at all
 reg_exp ::= seq ('|' seq)*
 seq ::= unary_item*
 unary_item ::= item (('*'|'+'|'?'|repeat) '?'?)?
-repeat ::= '{' number ',' number '}' | '{' ',' number '}' | '{' number ',' '}'
+repeat ::= '{' (number ',' number|',' number| number ',') '}'
 item ::= bos|eos|any|bracket_exp|group|set_item
-set_item ::= bschar|character|number
-character ::= letter|number|space|','|';'|':'|'='|'~'|'<'|'>'|'-'|'_'|'!'|'@'|'#'|'%'|'&'
-letter ::= 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z'
-number ::= '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
+set_item ::= bschar|number|letter|non_alphabet
+non_alphabet ::= space|','|';'|':'|'='|'~'|'<'|'>'|'-'|'_'|'!'|'@'|'#'|'%'|'&'
+letter ::= 'A'-'Z'|'a'-'z'
+number ::= '0'-'9'
 bos ::= '^'
 eos ::= '$'
 any ::= '.'
 bracket_exp ::= '(' (reg_exp|qexp) ')'
 qexp ::= '?' (icase|keep|before|not_before|after|not_after|mark_tag_create|mark_tag_use) reg_exp
-icase            ::= 'i' ':'
+icase            ::= "i:"
 keep             ::= '>'
 before           ::= '='
 not_before       ::= '!'
-after            ::= '<' '='
-not_after        ::= '<' '!'
-mark_tag_create  ::= 'P' '<' name '>'
-mark_tag_use     ::= 'P' '=' name
+after            ::= "<="
+not_after        ::= "<!"
+mark_tag_create  ::= "P<" name '>'
+mark_tag_use     ::= "P=" name
 name             ::= letter+
 bschar ::= '\' (bs_backslash|bs_back_ref|bs_boundary|bs_digit|bs_word|bs_space|bs_new_line)
 bs_backslash ::= '\'
@@ -50,10 +50,14 @@ bs_word      ::= 'w'|not_bs_word
 not_bs_word  ::= 'W'
 bs_space     ::= 's'|not_bs_space
 not_bs_space ::= 'S'
-bs_new_line  ::= 'r'? '\' 'n'|'n'
+bs_new_line  ::= "r\n"|'n'
 group ::= '[' (char_group|'^'? set)
-set ::= (set_item|range)* ']'
-range ::= (number '-' number|letter '-' letter)
+set ::= (set_item|range_exp)+ ']'
+range_exp ::= number set_num|letter set_abc|set_item
+set_num     ::= '-' num_range|set_item
+num_range   ::= number
+set_abc     ::= '-' abc_range|set_item
+abc_range   ::= letter
 spaces ::= space*
 space ::= ' '|'\n'|'\t'|'\r'
 char_group  ::= ':' ('a' set_a|'b' set_b|'c' set_c|'d' set_d|'g' set_g|'l' set_l|'p' set_p|'s' set_s|'u' set_u|'x' set_x|set)
