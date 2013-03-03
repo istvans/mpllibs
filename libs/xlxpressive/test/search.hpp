@@ -14,15 +14,18 @@
 
 #include <string>
 
-#include "search.hpp"
-
-BOOST_AUTO_TEST_CASE(test_grammar)
+template <class Regexp>
+bool search(const std::string& s)
 {
-  using boost::mpl::string;
+  using boost::xpressive::sregex;
+  using boost::xpressive::smatch;
+  using boost::mpl::apply_wrap1;
+  using boost::xpressive::regex_search;
 
-  BOOST_REQUIRE(true); //perl test
-  typedef string< '^' > pattern0;
-  BOOST_REQUIRE( search< pattern0 >("hello") );
+  using mpllibs::xlxpressive::regexp_parser;
 
+  const sregex re = apply_wrap1<regexp_parser, Regexp>::type::run();
+  smatch w;
+  return regex_search(s, w, re);
 }
-// Generated on Sun Mar  3 21:06:18 2013 (CET)
+

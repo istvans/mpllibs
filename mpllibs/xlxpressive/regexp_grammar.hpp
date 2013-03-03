@@ -35,9 +35,7 @@ namespace mpllibs
       }
     };
     typedef metaparse::always< metaparse::lit_c<'$'>, build_eos > eos; 
-    
 
-//    typedef metaparse::build_parser<metaparse::entire_input<eos> > regexp_parser;
     typedef metaparse::build_parser<metaparse::entire_input<bos> > regexp_parser;
   }
 }
