@@ -111,6 +111,7 @@ link:MPLLIBS_DEFINE_TD_METAFUNCTION.html[MPLLIBS_DEFINE_TAG_DISPATCHING_METAFUNC
 link:MPLLIBS_LAZY_METAFUNCTION.html[MPLLIBS_LAZY_METAFUNCTION] +
 link:MPLLIBS_METAFUNCTION.html[MPLLIBS_METAFUNCTION] +
 
+link:calculated_value.html[calculated_value] +
 link:make_tmp_value.html[make_tmp_value] +
 link:returns.html[returns] +
 link:tmp_tag.html[tmp_tag] +
@@ -200,8 +201,11 @@ Miscellaneous
 -------------
 
 link:guard.html[guard] +
+link:has_get_value.html[has_get_value] +
+link:has_value.html[has_value] +
 link:instantiate.html[instantiate] +
 link:is_tag.html[is_tag] +
+link:value_to_stream.html[value_to_stream] +
 
 include::copyright[]
 

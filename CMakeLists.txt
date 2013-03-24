@@ -6,13 +6,9 @@
 cmake_minimum_required(VERSION 2.6)
 project(mpllibs)
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-  find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-  if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIR})
-    link_directories(${Boost_LIBRARY_DIRS})
-  endif()
-endif()
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}")
 include(Asciidoc)
@@ -21,8 +17,6 @@ include(Files)
 enable_testing()
 
 include_directories(".")
-
-set(BUILD_SHARED_LIBS ON)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
   subdirs(libs)
@@ -49,39 +43,8 @@ else()
     set(WEBSITE_FILES ${WEBSITE_FILES} ${WEBSITE_ROOT}/${F}.html)
   endforeach(F)
   
-  
-  # metatest code samples
-  foreach(E
-    boost_mpl_unit_test
-    metatest_example
-    stream_type
-    boost_test_assertion
-    ugly
-    misc
-    reverse
-    exception_debug
-  )
-    set(FILENAME example_${E}.html)
-    set(DST_FILE ${WEBSITE_ROOT}/metatest/${FILENAME})
-  
-    set(WEBSITE_FILES ${WEBSITE_FILES} ${DST_FILE})
-    copy_file(
-      ${CMAKE_SOURCE_DIR}/libs/metatest/html
-      ${FILENAME}
-      ${WEBSITE_ROOT}/metatest
-      example_${E}_output
-    )
-  endforeach(E)
-  
-  copy_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/metatest/html
-    jquery.js
-    ${WEBSITE_ROOT}/metatest
-  )
-  set(WEBSITE_FILES ${WEBSITE_FILES} ${WEBSITE_ROOT}/metatest/jquery.js)
-  
   # The libraries
-  foreach(L metatest metamonad metaparse safe_printf xlxpressive)
+  foreach(L metamonad metaparse safe_printf xlxpressive)
     set(DIR ${CMAKE_SOURCE_DIR}/libs/${L})
     file(GLOB FILES ${DIR}/doc/*.txt)
     list(REMOVE_ITEM FILES ${DIR}/doc/CMakeLists.txt ${DIR}/doc/index.txt)

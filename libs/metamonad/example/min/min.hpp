@@ -1,5 +1,5 @@
-#ifndef MPLLIBS_METATEST_MIN_HPP
-#define MPLLIBS_METATEST_MIN_HPP
+#ifndef MPLLIBS_METAMONAD_EXAMPLE_MIN_HPP
+#define MPLLIBS_METAMONAD_EXAMPLE_MIN_HPP
 
 // Copyright Abel Sinkovics (abel@sinkovics.hu) 2011.
 // Distributed under the Boost Software License, Version 1.0.
@@ -9,8 +9,6 @@
 #include "less.hpp"
 
 #include <mpllibs/metamonad/try_c.hpp>
-
-#include <mpllibs/metatest/to_stream_fwd.hpp>
 
 #include <boost/mpl/apply_wrap.hpp>
 #include <boost/mpl/if.hpp>
@@ -35,8 +33,6 @@ struct min :
     typename B::type
   >
 {};
-
-MPLLIBS_DEFINE_TO_STREAM_FOR_TEMPLATE(2, min, "min")
 
 #endif
 
