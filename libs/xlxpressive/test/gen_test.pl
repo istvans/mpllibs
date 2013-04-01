@@ -39,7 +39,7 @@ print "#include <string>\n";
 print "\n";
 print "#include \"search.hpp\"\n";
 print "\n";
-print "BOOST_AUTO_TEST_CASE(test_grammar)\n";
+print "BOOST_AUTO_TEST_CASE(test_grammar_json)\n";
 print "{\n";
 print "  using boost::mpl::string;\n";
 
