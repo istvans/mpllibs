@@ -10,6 +10,7 @@
 #include <mpllibs/metaparse/build_parser.hpp>
 #include <mpllibs/metaparse/entire_input.hpp>
 #include <mpllibs/metaparse/always.hpp>
+#include <mpllibs/metaparse/one_of.hpp>
 
 #include <boost/xpressive/regex_primitives.hpp>
 #include <boost/xpressive/xpressive.hpp>
@@ -25,8 +26,10 @@ namespace mpllibs
         return boost::xpressive::bos;
       }
     };
-    typedef metaparse::always< metaparse::lit_c<'^'>, build_bos > bos; 
-    
+    typedef metaparse::always< metaparse::lit_c<'^'>, build_bos > bos;
+
+    //=========================================================================
+
     struct build_eos
     {
       typedef build_eos type;
@@ -34,9 +37,37 @@ namespace mpllibs
         return boost::xpressive::eos;
       }
     };
-    typedef metaparse::always< metaparse::lit_c<'$'>, build_eos > eos; 
+    typedef metaparse::always< metaparse::lit_c<'$'>, build_eos > eos;
+    
+    //=========================================================================
+    
+    struct build_any
+    {
+      typedef build_any type;
+      static boost::xpressive::sregex run() {
+        return ~boost::xpressive::_n;
+      }
+    };
+    typedef metaparse::always< metaparse::lit_c<'.'>, build_any > any;
+    
+    //=========================================================================
 
-    typedef metaparse::build_parser<metaparse::entire_input<bos> > regexp_parser;
+    typedef metaparse::one_of<
+      xlxpressive::bos,
+      xlxpressive::eos,
+      xlxpressive::any
+    >
+    item;
+    
+    //=========================================================================
+
+
+    //unary_item;
+
+    //=========================================================================
+
+    //typedef metaparse::build_parser< metaparse::entire_input<reg_exp> > regexp_parser;
+    typedef metaparse::build_parser< metaparse::entire_input<item> > regexp_parser;
   }
 }
 

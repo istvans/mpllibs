@@ -4,20 +4,6 @@
 ;       http://www.boost.org/LICENSE_1_0.txt)
 
 [test1]
-str=
-pat=^
-flg=
-br0=
-[end]
-
-[test2]
-str=
-pat=$
-flg=
-br0=
-[end]
-
-[test3]
 str=A
 pat=.
 flg=
