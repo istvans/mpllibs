@@ -26,6 +26,7 @@
 #include <mpllibs/metamonad/first.hpp>
 #include <mpllibs/metamonad/second.hpp>
 #include <mpllibs/metamonad/pair.hpp>
+#include <mpllibs/metamonad/is_same.hpp>
 
 #include <boost/mpl/map.hpp>
 #include <boost/mpl/fold.hpp>
@@ -40,8 +41,6 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/push_back.hpp>
 
-#include <boost/type_traits.hpp>
-
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum.hpp>
@@ -52,11 +51,13 @@ namespace mpllibs
 {
   namespace metamonad
   {
-    MPLLIBS_METAFUNCTION(bad_match, (Pattern)(Value))
+    MPLLIBS_LAZY_METAFUNCTION(bad_match, (Pattern)(Value))
     ((tmp_value<bad_match<Pattern, Value> >));
 
     template <class Pattern, class Value>
-    struct match_impl : exception<bad_match<Pattern, Value> > {};
+    struct match_impl :
+      exception<bad_match<syntax<Pattern>, syntax<Value> > >
+    {};
 
     template <class Pattern, class Value>
     struct match_c_impl : match_impl<Pattern, Value> {};
@@ -107,12 +108,7 @@ namespace mpllibs
               if_<
                 second<s>,
                 if_<
-                  lazy<
-                    boost::is_same<
-                      lazy_protect_args<first<c> >,
-                      lazy_protect_args<first<Pair> >
-                    >
-                  >,
+                  is_same<first<c>, first<Pair> >,
                   pair<
                     lazy<
                       boost::mpl::push_back<
@@ -161,24 +157,17 @@ namespace mpllibs
                 >
               >,
               if_<
-                lazy<
-                  boost::is_same<
+                is_same<
+                  lazy<
                     boost::mpl::at<
                       already_lazy<s>,
                       lazy_protect_args<first<p> >
-                    >,
-                    lazy_protect_args<second<p> >
-                  >
+                    >
+                  >,
+                  second<p>
                 >,
                 s,
-                exception<
-                  lazy<
-                    bad_match<
-                      lazy_protect_args<first<p> >,
-                      lazy_protect_args<second<p> >
-                    >
-                  >
-                >
+                exception<bad_match<first<p>, second<p> > >
               >,
               map_insert<s, p>
             >

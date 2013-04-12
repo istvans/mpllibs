@@ -9,12 +9,10 @@
 #include <mpllibs/metamonad/monad.hpp>
 #include <mpllibs/metamonad/tmp_tag.hpp>
 #include <mpllibs/metamonad/lambda.hpp>
-#include <mpllibs/metamonad/lazy.hpp>
 #include <mpllibs/metamonad/name.hpp>
 #include <mpllibs/metamonad/eval_match_let_c.hpp>
 #include <mpllibs/metamonad/pair.hpp>
-
-#include <boost/mpl/apply_wrap.hpp>
+#include <mpllibs/metamonad/apply.hpp>
 
 namespace mpllibs
 {
@@ -29,11 +27,7 @@ namespace mpllibs
 
       typedef
         lambda_c<a, f, s,
-          eval_match_let_c<
-            pair<t, u>,
-            lazy<boost::mpl::apply_wrap1<a, s> >,
-            lazy<boost::mpl::apply_wrap1<boost::mpl::apply_wrap1<f, t>, u> >
-          >
+          eval_match_let_c<pair<t, u>, apply<a, s>, apply<apply<f, t>, u> >
         >
         bind;
     };

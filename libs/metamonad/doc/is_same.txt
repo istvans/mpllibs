@@ -1,9 +1,9 @@
-//    Copyright Abel Sinkovics (abel@sinkovics.hu) 2012.
+//    Copyright Abel Sinkovics (abel@sinkovics.hu) 2013.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-mconcat
+is_same
 =======
 Abel Sinkovics
 
@@ -11,8 +11,8 @@ Synopsis
 --------
 
 --------------------------------------
-template <class MonadTag, class L>
-struct mconcat
+template <class A, class B>
+struct is_same
 {
   // unspecified
 };
@@ -22,48 +22,33 @@ struct mconcat
 Description
 -----------
 
-+mconcat+ is a metafunction for the +mconcat+ operation of the
-link:monoid.html[monoid] typeclass.
+Lazy template metafunction with currying support for comparing two types. It
+returns a boolean value indicating if the two types are identical.
 
 Header
 ------
 
 --------------------------------------
-#include <mpllibs/metamonad/mconcat.hpp>
+#include <mpllibs/metamonad/is_same.hpp>
 --------------------------------------
 
 Expression semantics
 --------------------
 
-For any +monad_tag+ tag and +l+ list:
+For any +a+ and +b+ types, for which +a::type+ and +b::type+ are not identical
+the following evaluate to true:
 
 --------------------------------------
-mconcat<monad_tag, l>
---------------------------------------
-
-is equivalent to
-
---------------------------------------
-apply<monoid<monad_tag>::mconcat, l>
+mpl::not_<is_same<a, b>::type>
+is_same<a, a>::type
+is_same<b, b>::type
 --------------------------------------
 
 Example
 -------
 
 --------------------------------------
-using boost::mpl::list_c;
-using boost::mpl::list;
-
-typedef
-  mconcat<
-    list_tag,
-    list<
-      list_c<int, 0, 1, 2, 3, 4>,
-      list_c<int, 5, 6>,
-      list_c<int, 7, 8, 9>
-    >
-  >::type
-  list_0_to_10;
+is_same<box<int>, box<double>>
 --------------------------------------
 
 include::copyright[]

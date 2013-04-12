@@ -64,6 +64,7 @@ link:lazy_protect_args.html[lazy_protect_args] +
 Lambda expression
 ~~~~~~~~~~~~~~~~~
 
+link:apply.html[apply] +
 link:lambda.html[lambda] +
 link:lambda_c.html[lambda_c] +
 
@@ -204,6 +205,7 @@ link:guard.html[guard] +
 link:has_get_value.html[has_get_value] +
 link:has_value.html[has_value] +
 link:instantiate.html[instantiate] +
+link:is_same.html[is_same] +
 link:is_tag.html[is_tag] +
 link:value_to_stream.html[value_to_stream] +
 

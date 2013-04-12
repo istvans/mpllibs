@@ -17,6 +17,7 @@
 #include <mpllibs/metamonad/name.hpp>
 #include <mpllibs/metamonad/either.hpp>
 #include <mpllibs/metamonad/lazy.hpp>
+#include <mpllibs/metamonad/apply.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -63,7 +64,7 @@ namespace mpllibs
     struct monad<wrapper_tag>
     {
       typedef lambda_c<t, wrapped<t> > return_;
-      typedef lambda_c<a, f, boost::mpl::apply<f, a> > bind;
+      typedef lambda_c<a, f, apply<f, a> > bind;
     };
   }
 }
@@ -83,7 +84,7 @@ namespace boost
 
 namespace
 {
-  MPLLIBS_LAZY_METAFUNCTION(minus_2, (A)) ((lazy<right<minus<A, int2> > >));
+  MPLLIBS_LAZY_METAFUNCTION(minus_2, (A)) ((right<minus<A, int2> >));
   
   MPLLIBS_LAZY_METAFUNCTION(eval_to_right, (T)) ((right<T>));
 }
