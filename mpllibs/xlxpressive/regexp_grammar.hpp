@@ -253,7 +253,8 @@ namespace mpllibs
 
     struct seq_builder
     {
-      template<class E> void operator()(E) {
+      template<class E> void operator()(E)
+      {
         assert(seq_expr_ptr != 0);
         if (seq_expr_ptr->regex_id() == 0) {
           *seq_expr_ptr = E::type::run();
@@ -291,9 +292,50 @@ namespace mpllibs
     seq;
     
     //=========================================================================
+    
+    boost::xpressive::sregex alternation;
 
-//    typedef metaparse::build_parser< metaparse::entire_input<reg_exp> > regexp_parser;
-    typedef metaparse::build_parser< metaparse::entire_input<seq> > regexp_parser;
+    struct reg_exp_builder
+    {
+      template<class LitSeq> void operator()(LitSeq)
+      {
+        boost::xpressive::sregex tmp = alternation | back<LitSeq>::type::run();
+        alternation = tmp;
+      }
+    };
+
+    struct build_regular_expression
+    {
+      template <class Seq>
+      struct apply
+      {
+        typedef apply type;
+        static boost::xpressive::sregex run() {
+          alternation = front<Seq>::type::run();
+          for_each< typename back<Seq>::type >(reg_exp_builder());
+
+          return alternation;
+        }
+      };
+    };
+
+    typedef metaparse::transform<
+      metaparse::sequence<
+        xlxpressive::seq,
+        metaparse::any<
+          metaparse::sequence<
+            metaparse::lit_c<'|'>,
+            xlxpressive::seq
+          >
+        >
+      >,
+      xlxpressive::build_regular_expression
+    >
+    reg_exp;
+    
+    //=========================================================================
+
+    typedef metaparse::build_parser< metaparse::entire_input<reg_exp> > regexp_parser;
   }
 }
 

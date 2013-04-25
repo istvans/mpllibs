@@ -23,7 +23,7 @@
 BOOST_AUTO_TEST_CASE(test_grammar)
 {
   std::vector<std::string> matched;
-  //Number of test cases: 12
+  //Number of test cases: 15
 
   BOOST_REQUIRE(true); //perl test
   matched.push_back("");
@@ -93,6 +93,24 @@ BOOST_AUTO_TEST_CASE(test_grammar)
   BOOST_REQUIRE(true); //perl test
   typedef boost::mpl::string< '^...','....','...$' > Regexp11;
   BOOST_REQUIRE( search< Regexp11 >("abcdefghijk", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("abc");
+  typedef boost::mpl::string< '^...','$|^.','...$' > Regexp12;
+  BOOST_REQUIRE( search< Regexp12 >("abc", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("abcd");
+  typedef boost::mpl::string< '^...','$|^.','...$' > Regexp13;
+  BOOST_REQUIRE( search< Regexp13 >("abcd", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("cd");
+  typedef boost::mpl::string< '^.$|','^..$','|^..','.$' > Regexp14;
+  BOOST_REQUIRE( search< Regexp14 >("cd", matched) );
   matched.clear();
 }
 

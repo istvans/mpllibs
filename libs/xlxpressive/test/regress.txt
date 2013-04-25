@@ -85,3 +85,24 @@ pat=^..........$
 flg=
 [end]
 
+[test13]
+str=abc
+pat=^...$|^....$
+flg=
+br0=abc
+[end]
+
+[test14]
+str=abcd
+pat=^...$|^....$
+flg=
+br0=abcd
+[end]
+
+[test15]
+str=cd
+pat=^.$|^..$|^...$
+flg=
+br0=cd
+[end]
+

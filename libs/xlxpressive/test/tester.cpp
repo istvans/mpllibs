@@ -59,9 +59,9 @@ int main()
 {
   std::vector<std::string> matched;
 
-  matched.push_back("adkjasdkas");
-  typedef boost::mpl::string< '^...','....','...$' > Regexp1;
-  search< Regexp1 >("adkjasdkas", matched);
+  matched.push_back("abc");
+  typedef boost::mpl::string< '^...','$|^.','...$' > Regexp1;
+  search< Regexp1 >("abc", matched);
   matched.clear();
   std::cout<<"=========================================="<<std::endl;
 }
