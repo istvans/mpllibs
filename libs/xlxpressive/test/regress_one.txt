@@ -4,9 +4,9 @@
 ;       http://www.boost.org/LICENSE_1_0.txt)
 
 [test1]
-str=A
-pat=.
+str=abc
+pat=^.*$
 flg=
-br0=A
+br0=abc
 [end]
 

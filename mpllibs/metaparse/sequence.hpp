@@ -84,7 +84,7 @@ namespace mpllibs
     }
   
     #ifndef MPLLIBS_SEQUENCE_MAX_ARGUMENT
-      #define MPLLIBS_SEQUENCE_MAX_ARGUMENT 5
+      #define MPLLIBS_SEQUENCE_MAX_ARGUMENT 7
     #endif
 
     #ifdef MPLLIBS_SEQUENCE_CASE

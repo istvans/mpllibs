@@ -23,24 +23,76 @@
 BOOST_AUTO_TEST_CASE(test_grammar)
 {
   std::vector<std::string> matched;
-  //Number of test cases: 3
+  //Number of test cases: 12
 
   BOOST_REQUIRE(true); //perl test
   matched.push_back("");
   typedef boost::mpl::string< '^' > Regexp0;
-  BOOST_REQUIRE(search< Regexp0 >("", matched) );
+  BOOST_REQUIRE( search< Regexp0 >("", matched) );
   matched.clear();
 
   BOOST_REQUIRE(true); //perl test
   matched.push_back("");
   typedef boost::mpl::string< '$' > Regexp1;
-  BOOST_REQUIRE(search< Regexp1 >("", matched) );
+  BOOST_REQUIRE( search< Regexp1 >("", matched) );
   matched.clear();
 
   BOOST_REQUIRE(true); //perl test
   matched.push_back("A");
   typedef boost::mpl::string< '.' > Regexp2;
-  BOOST_REQUIRE(search< Regexp2 >("A", matched) );
+  BOOST_REQUIRE( search< Regexp2 >("A", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("iiiiiii");
+  typedef boost::mpl::string< '.*' > Regexp3;
+  BOOST_REQUIRE( search< Regexp3 >("iiiiiii", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("");
+  typedef boost::mpl::string< '.*?' > Regexp4;
+  BOOST_REQUIRE( search< Regexp4 >("kkkkk", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("iii");
+  typedef boost::mpl::string< '.{2,','4}' > Regexp5;
+  BOOST_REQUIRE( search< Regexp5 >("iii", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("ff");
+  typedef boost::mpl::string< '.{2,','4}?' > Regexp6;
+  BOOST_REQUIRE( search< Regexp6 >("ffff", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  typedef boost::mpl::string< '.{2,','4}' > Regexp7;
+  BOOST_REQUIRE( search< Regexp7 >("i", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("abcd");
+  typedef boost::mpl::string< '^.*$' > Regexp8;
+  BOOST_REQUIRE( search< Regexp8 >("abcd", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("abc");
+  typedef boost::mpl::string< '...' > Regexp9;
+  BOOST_REQUIRE( search< Regexp9 >("abcde", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("abcdefghij");
+  typedef boost::mpl::string< '^...','....','...$' > Regexp10;
+  BOOST_REQUIRE( search< Regexp10 >("abcdefghij", matched) );
+  matched.clear();
+
+  BOOST_REQUIRE(true); //perl test
+  typedef boost::mpl::string< '^...','....','...$' > Regexp11;
+  BOOST_REQUIRE( search< Regexp11 >("abcdefghijk", matched) );
   matched.clear();
 }
 

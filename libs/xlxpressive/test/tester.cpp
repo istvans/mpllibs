@@ -3,12 +3,8 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_DYN_LINK
-
-#include <mpllibs/xlxpressive/regexp_grammar.hpp>
-
-#include <mpllibs/metatest/boost_test.hpp>
-#include <boost/test/unit_test.hpp>
+#include "../../../mpllibs/xlxpressive/regexp_grammar.hpp"
+//#include <mpllibs/xlxpressive/regexp_grammar.hpp>
 
 #include <boost/mpl/string.hpp>
 
@@ -27,7 +23,9 @@ bool search(const std::string& s, const std::vector<std::string>& m)
 
   //const sregex re = boost::xpressive::bos >> *~boost::xpressive::_n >> boost::xpressive::eos;
   //const sregex re = boost::xpressive::bos >> boost::xpressive::eos;
-  const sregex re = apply_wrap1<regexp_parser, Regexp>::type::run();
+  //const sregex re = ~boost::xpressive::_n >> ~boost::xpressive::_n;
+  //const sregex re = apply_wrap1<regexp_parser, Regexp>::type::run();
+  sregex re = apply_wrap1<regexp_parser, Regexp>::type::run();
   smatch w;
 
   bool success = regex_search(s, w, re);
@@ -55,5 +53,16 @@ bool search(const std::string& s, const std::vector<std::string>& m)
 
   std::cout << "RESULT: " << (success && size_check && sub_match) << std::endl;
   return (success && size_check && sub_match);
+}
+
+int main()
+{
+  std::vector<std::string> matched;
+
+  matched.push_back("adkjasdkas");
+  typedef boost::mpl::string< '^...','....','...$' > Regexp1;
+  search< Regexp1 >("adkjasdkas", matched);
+  matched.clear();
+  std::cout<<"=========================================="<<std::endl;
 }
 

@@ -47,7 +47,7 @@ sub get_tests
       next if ( (defined $test_case->{sub} && $test_case->{sub} !~ /^\s*$/)
              || (defined $test_case->{flg} && $test_case->{flg} !~ /^\s*$/) );
 
-      last if ($ntc >= $NUMBER_OF_TEST_CASES);
+#      last if ($ntc >= $NUMBER_OF_TEST_CASES);
 
       ++$ntc;
       $test_case->{match} = (!defined $test_case->{br} || scalar(@{$test_case->{br}}) == 0) ? 0 : 1;
@@ -130,7 +130,7 @@ for (my $k = 0; $k < scalar(@$test_cases); ++$k) {
   }
 
   printf "  typedef boost::mpl::string< %s > Regexp%i;\n", $regexp, $k;
-  printf "  BOOST_REQUIRE(search< Regexp%i >(\"%s\", matched) );\n", $k, $test_case->{str};
+  printf "  BOOST_REQUIRE( search< Regexp%i >(\"%s\", matched) );\n", $k, $test_case->{str};
   print  "  matched.clear();\n";
 }
 
