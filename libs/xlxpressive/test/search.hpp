@@ -54,6 +54,7 @@ bool search(const std::string& s, const std::vector<std::string>& m)
   std::cout << "sub_match: " << sub_match << std::endl;
 
   std::cout << "RESULT: " << (success && size_check && sub_match) << std::endl;
+  std::cout << "====================================================" << std::endl;
   return (success && size_check && sub_match);
 }
 

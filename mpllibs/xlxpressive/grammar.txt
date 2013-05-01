@@ -29,7 +29,8 @@ bos ::= '^'
 eos ::= '$'
 any ::= '.'
 bracket_exp ::= '(' (reg_exp|qexp) ')'
-qexp ::= '?' (icase|keep|before|not_before|after|not_after|mark_tag_create|mark_tag_use) reg_exp
+qexp ::= '?' (no_back_ref|icase|keep|before|not_before|after|not_after|mark_tag_create|mark_tag_use) reg_exp
+no_back_ref      ::= ":"
 icase            ::= "i:"
 keep             ::= '>'
 before           ::= '='
@@ -39,7 +40,8 @@ not_after        ::= "<!"
 mark_tag_create  ::= "P<" name '>'
 mark_tag_use     ::= "P=" name
 name             ::= letter+
-bschar ::= '\' (bs_backslash|bs_back_ref|bs_boundary|bs_digit|bs_word|bs_space|bs_new_line)
+bschar ::= '\'
+(bs_backslash|bs_back_ref|bs_boundary|bs_digit|bs_word|bs_space|bs_new_line|bs_caret|bs_dollar|bs_full_stop)
 bs_backslash ::= '\'
 bs_back_ref  ::= number
 bs_boundary  ::= 'b'|not_bs_boundary
@@ -51,6 +53,9 @@ not_bs_word  ::= 'W'
 bs_space     ::= 's'|not_bs_space
 not_bs_space ::= 'S'
 bs_new_line  ::= "r\n"|'n'
+bs_caret     ::= '^'
+bs_dollar    ::= '$'
+bs_full_stop ::= '.'
 group ::= '[' (char_group|'^'? set)
 set ::= (range_exp|set_item)+ ']'
 range_exp ::= number set_num|letter set_abc|set_item

@@ -99,14 +99,22 @@ printf "  //Number of test cases: %i\n", $test_cases->[0]->{number_of_tests};
 my $CHAR_LIMIT = 4;
 for (my $k = 0; $k < scalar(@$test_cases); ++$k) {
   my $test_case = \%{$test_cases->[$k]};
-  print "\n";
+  print "\n  //",$test_case->{name},"\n";
   
   my $perl_match = 0;
+  my $preprocessed_pattern = $test_case->{pat};
+  $preprocessed_pattern =~ s#\\\\(?=[bBwWdDsSnr\$^.])#\\#g;
+  $preprocessed_pattern =~ s#(?<=[^\\])\\\\\\(?=[^\\])#\\\\\\\\#g;
+  
+  my $preprocessed_string = $test_case->{str};
+  $preprocessed_string =~ s#\\\\#\\#g;
+
+#  print "'$preprocessed_pattern' '$preprocessed_string' '$test_case->{match}'\n";
   if (!$test_case->{match}) {
-    $perl_match = 1 if ("$test_case->{str}" !~ /$test_case->{pat}/);
+    $perl_match = 1 if ("$preprocessed_string" !~ /$preprocessed_pattern/);
   }
   else {
-    $perl_match = 1 if ("$test_case->{str}" =~ /$test_case->{pat}/);
+    $perl_match = 1 if ("$preprocessed_string" =~ /$preprocessed_pattern/);
   }
   print  "  BOOST_REQUIRE(" . (($perl_match) ? "true" : "false") . "); //perl test\n";
 
@@ -114,7 +122,7 @@ for (my $k = 0; $k < scalar(@$test_cases); ++$k) {
   my $regexp = "'";
   for (my $k = 0; $k < scalar(@re_chars); ++$k) {
     $regexp .= $re_chars[$k];
-    if (($k+1) % $CHAR_LIMIT == 0) {
+    if (($k+1) % $CHAR_LIMIT == 0 || ($k+2 < scalar(@re_chars) && $re_chars[$k+1] =~ /\\/ && $re_chars[$k+2] =~ /\\/) && ($k+3>=scalar(@re_chars) || $re_chars[$k+3] !~ /\\/) ) {
       if ($k == (scalar(@re_chars)-1)) {
         $regexp .= "'";
       }
@@ -124,6 +132,10 @@ for (my $k = 0; $k < scalar(@$test_cases); ++$k) {
     }
   }
   $regexp .= "'" if (substr($regexp, length($regexp)-1, 1) ne "'");
+  $regexp =~ s#,'\\','([^']{1,3})'#,'\\$1'#g;
+  $regexp =~ s#\\','([^']{3})([^'])'#','\\$1','$2'#g;
+
+  $regexp =~ s#,'',#,#g;
 
   foreach my $br (@{$test_case->{br}}) {
     printf "  matched.push_back(\"%s\");\n", $br;
