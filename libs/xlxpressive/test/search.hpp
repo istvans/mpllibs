@@ -7,7 +7,6 @@
 
 #include <mpllibs/xlxpressive/regexp_grammar.hpp>
 
-#include <mpllibs/metatest/boost_test.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <boost/mpl/string.hpp>

@@ -82,7 +82,6 @@ print "#define BOOST_TEST_DYN_LINK\n";
 print "\n";
 print "#include <mpllibs/xlxpressive/regexp_grammar.hpp>\n";
 print "\n";
-print "#include <mpllibs/metatest/boost_test.hpp>\n";
 print "#include <boost/test/unit_test.hpp>\n";
 print "\n";
 print "#include <boost/mpl/string.hpp>\n";
