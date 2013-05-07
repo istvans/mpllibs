@@ -26,6 +26,8 @@ bool search(const std::string& s, const std::vector<std::string>& m)
 
   //const sregex re = boost::xpressive::bos >> *~boost::xpressive::_n >> boost::xpressive::eos;
   //const sregex re = boost::xpressive::bos >> boost::xpressive::eos;
+//  const sregex t1 = boost::xpressive::as_xpr('f') >> boost::xpressive::as_xpr('o') >> boost::xpressive::as_xpr('o');
+//  const sregex re = (boost::xpressive::s1= t1 );
   const sregex re = apply_wrap1<regexp_parser, Regexp>::type::run();
   smatch w;
 
@@ -43,12 +45,12 @@ bool search(const std::string& s, const std::vector<std::string>& m)
   std::cout << "size_check: " << size_check << " | " << w.size() << " ~ " << m.size() << std::endl;
 
   bool sub_match = true;
-  for (int i = 0; i < w.size(); ++i) {
-    std::cout << "'" << w[i].str() << "'" << std::endl;
-    if (i >= m.size() || w[i].str() != m[i]) {
+  for (int i = 0; i < m.size(); ++i) {
+    if (i >= w.size() || w[i].str() != m[i]) {
       sub_match = false;
       break;
     }
+    else { std::cout << "'" << w[i].str() << "'" << " VS " << "'" << m[i] << "'" << std::endl; }
   }
   std::cout << "sub_match: " << sub_match << std::endl;
 
