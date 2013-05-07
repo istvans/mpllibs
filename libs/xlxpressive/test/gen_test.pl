@@ -104,6 +104,7 @@ for (my $k = 0; $k < scalar(@$test_cases); ++$k) {
   my $preprocessed_pattern = $test_case->{pat};
   $preprocessed_pattern =~ s#\\\\(?=[bBwWdDsSnr\$^.])#\\#g;
   $preprocessed_pattern =~ s#(?<=[^\\])\\\\\\(?=[^\\])#\\\\\\\\#g;
+  $preprocessed_pattern =~ s#\\\\(\d)#\\$1#g;
   
   my $preprocessed_string = $test_case->{str};
   $preprocessed_string =~ s#\\\\#\\#g;
