@@ -53,7 +53,7 @@ namespace mpllibs
     struct build_bos
     {
       typedef build_bos type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::bos;
       }
@@ -65,7 +65,7 @@ namespace mpllibs
     struct build_eos
     {
       typedef build_eos type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::eos;
       }
@@ -77,7 +77,7 @@ namespace mpllibs
     struct build_any
     {
       typedef build_any type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return ~boost::xpressive::_n;
       }
@@ -93,7 +93,7 @@ namespace mpllibs
       {
         typedef apply type;
 
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
           return boost::xpressive::as_xpr( metaparse::util::int_to_digit<N>::type::value );
         }
@@ -151,7 +151,7 @@ namespace mpllibs
       {
         typedef apply type;
 
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
           std::cout<< "  build_letter-run: " << ch::value << std::endl;
           return boost::xpressive::as_xpr( ch::value );
@@ -191,7 +191,7 @@ namespace mpllibs
     struct back_reference0
     {
       typedef back_reference0 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::s0;
       }
@@ -200,8 +200,9 @@ namespace mpllibs
     struct back_reference1
     {
       typedef back_reference1 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
+        std::cout<< "  back_reference1: " << bracket_counter << std::endl;
         return boost::xpressive::s1;
       }
     };
@@ -209,7 +210,7 @@ namespace mpllibs
     struct back_reference2
     {
       typedef back_reference2 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::s2;
       }
@@ -218,7 +219,7 @@ namespace mpllibs
     struct back_reference3
     {
       typedef back_reference3 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::s3;
       }
@@ -227,7 +228,7 @@ namespace mpllibs
     struct back_reference4
     {
       typedef back_reference4 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::s4;
       }
@@ -236,7 +237,7 @@ namespace mpllibs
     struct back_reference5
     {
       typedef back_reference5 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::s5;
       }
@@ -245,7 +246,7 @@ namespace mpllibs
     struct back_reference6
     {
       typedef back_reference6 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::s6;
       }
@@ -254,7 +255,7 @@ namespace mpllibs
     struct back_reference7
     {
       typedef back_reference7 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::s7;
       }
@@ -263,7 +264,7 @@ namespace mpllibs
     struct back_reference8
     {
       typedef back_reference8 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::s8;
       }
@@ -272,7 +273,7 @@ namespace mpllibs
     struct back_reference9
     {
       typedef back_reference9 type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::s9;
       }
@@ -306,7 +307,7 @@ namespace mpllibs
     struct word_boundary
     {
       typedef word_boundary type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::_b;
       }
@@ -334,7 +335,7 @@ namespace mpllibs
     struct not_word_boundary
     {
       typedef not_word_boundary type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return ~boost::xpressive::_b;
       }
@@ -362,7 +363,7 @@ namespace mpllibs
     struct digit_character
     {
       typedef digit_character type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::_d;
       }
@@ -390,7 +391,7 @@ namespace mpllibs
     struct not_digit_character
     {
       typedef not_digit_character type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return ~boost::xpressive::_d;
       }
@@ -418,7 +419,7 @@ namespace mpllibs
     struct word_character
     {
       typedef word_character type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::_w;
       }
@@ -446,7 +447,7 @@ namespace mpllibs
     struct not_word_character
     {
       typedef not_word_character type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return ~boost::xpressive::_w;
       }
@@ -474,7 +475,7 @@ namespace mpllibs
     struct space_character
     {
       typedef space_character type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::_s;
       }
@@ -502,7 +503,7 @@ namespace mpllibs
     struct not_space_character
     {
       typedef not_space_character type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return ~boost::xpressive::_s;
       }
@@ -530,7 +531,7 @@ namespace mpllibs
     struct logical_newline
     {
       typedef logical_newline type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::_ln;
       }
@@ -558,7 +559,7 @@ namespace mpllibs
     struct literal_newline
     {
       typedef literal_newline type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::_n;
       }
@@ -586,7 +587,7 @@ namespace mpllibs
     struct backslash
     {
       typedef backslash type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::as_xpr('\\');
       }
@@ -614,7 +615,7 @@ namespace mpllibs
     struct caret
     {
       typedef caret type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::as_xpr('^');
       }
@@ -642,7 +643,7 @@ namespace mpllibs
     struct dollar
     {
       typedef dollar type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::as_xpr('$');
       }
@@ -670,7 +671,7 @@ namespace mpllibs
     struct full_stop
     {
       typedef full_stop type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
         return boost::xpressive::as_xpr('.');
       }
@@ -701,9 +702,10 @@ namespace mpllibs
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
-          return Bschar::type::run();
+          std::cout<< "  build_bschar: " << bracket_counter << std::endl;
+          return Bschar::type::run(bracket_counter);
         }
 
         template <class T>
@@ -786,7 +788,7 @@ namespace mpllibs
       {
         typedef apply type;
 
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
           return boost::xpressive::as_xpr( ch::value );
         }
@@ -931,9 +933,9 @@ namespace mpllibs
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run() {
+        static boost::xpressive::sregex run(int &bracket_counter) {
           std::cout << "build_qexp - getting tmp" << std::endl;
-          const boost::xpressive::sregex tmp = boost::mpl::at< Seq, boost::mpl::int_<2> >::type::run();
+          const boost::xpressive::sregex tmp = boost::mpl::at< Seq, boost::mpl::int_<2> >::type::run(bracket_counter);
           std::cout << "build_qexp - got tmp" << std::endl;
           return boost::mpl::at< Seq, boost::mpl::int_<1> >::type::run( tmp );
         }
@@ -976,28 +978,26 @@ namespace mpllibs
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
-          std::cout << "build_qexp_based_bracket_exp" << std::endl;
-          return E::type::run();
+          std::cout << "build_qexp_based_bracket_exp: " << bracket_counter << std::endl;
+          return E::type::run(bracket_counter);
         }
       };
     };
 
-    int bracket_counter = 0;
     struct build_reg_exp_based_bracket_exp
     {
       template <class E>
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
           ++bracket_counter;
           std::cout<< "build_reg_exp_based_bracket_exp - capturing: " << bracket_counter <<std::endl;
-          boost::xpressive::sregex a = E::type::run();
+          boost::xpressive::sregex a = E::type::run(bracket_counter);
           boost::xpressive::sregex ret;
-          std::cout<< "build_reg_exp_based_bracket_exp - before creation of " << bracket_counter <<std::endl;
           switch(bracket_counter) {
             case 1: ret = (boost::xpressive::s1= a); break;
             case 2: ret = (boost::xpressive::s2= a); break;
@@ -1021,10 +1021,10 @@ namespace mpllibs
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
-          std::cout<< "eval_bracket_exp" << std::endl;
-          return E::type::run();
+          std::cout<< "eval_bracket_exp: " << bracket_counter << std::endl;
+          return E::type::run(bracket_counter);
         }
       };
     };
@@ -1159,7 +1159,7 @@ namespace mpllibs
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
           return boost::mpl::at< Seq, boost::mpl::int_<2> >::type::run();
         }
@@ -1358,7 +1358,7 @@ namespace mpllibs
       }
     };
 
-    struct set_builder
+    struct build_set
     {
       template <class Next, class State>
       struct apply
@@ -1388,13 +1388,13 @@ namespace mpllibs
       };
     };
 
-    struct build_set
+    struct eval_set
     {
       template <class Set>
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
           return Set::type::run();
         }
@@ -1407,13 +1407,13 @@ namespace mpllibs
           metaparse::foldl1<
             metaparse::one_of< xlxpressive::range_exp, xlxpressive::set_item >,
             xlxpressive::empty_set,
-            xlxpressive::set_builder
+            xlxpressive::build_set
           >,
           xlxpressive::start_building_set
         >,
         metaparse::lit_c<']'>
       >,
-      xlxpressive::build_set
+      xlxpressive::eval_set
     >
     set;
     
@@ -1422,9 +1422,9 @@ namespace mpllibs
     struct positive_set
     {
       typedef positive_set type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
-        return S::type::run();
+        return S::type::run(bracket_counter);
       }
     };
     //[^...] -> ~set[...]
@@ -1432,23 +1432,23 @@ namespace mpllibs
     struct negative_set
     {
       typedef negative_set type;
-      static boost::xpressive::sregex run()
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
-        return ~S::type::run();
+        return ~S::type::run(bracket_counter);
       }
     };
 
     template <char A, class Set>
-    struct eval_set_impl;
+    struct eval_set_sign_impl;
     
-    template <class Set> struct eval_set_impl<'x', Set> : positive_set<Set> {};
-    template <class Set> struct eval_set_impl<'^', Set> : negative_set<Set> {};
+    template <class Set> struct eval_set_sign_impl<'x', Set> : positive_set<Set> {};
+    template <class Set> struct eval_set_sign_impl<'^', Set> : negative_set<Set> {};
  
-    struct eval_set
+    struct eval_set_sign
     {
       template <class Seq>
       struct apply :
-        eval_set_impl<
+        eval_set_sign_impl<
           boost::mpl::front<Seq>::type::value,
           boost::mpl::back<Seq>
         >
@@ -1463,9 +1463,9 @@ namespace mpllibs
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run()
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
-          return G::type::run();
+          return G::type::run(bracket_counter);
         }
       };
     };
@@ -1483,7 +1483,7 @@ namespace mpllibs
               >,
               xlxpressive::set
             >,
-            xlxpressive::eval_set
+            xlxpressive::eval_set_sign
           >
         >
       >,
@@ -1668,9 +1668,9 @@ namespace mpllibs
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run() {
-          std::cout << "build_unary_item" << std::endl;
-          return boost::mpl::back<Seq>::type::run(boost::mpl::front<Seq>::type::run());
+        static boost::xpressive::sregex run(int &bracket_counter) {
+          std::cout << "build_unary_item: " << bracket_counter << std::endl;
+          return boost::mpl::back<Seq>::type::run(boost::mpl::front<Seq>::type::run(bracket_counter));
         }
       };
     };
@@ -1683,91 +1683,91 @@ namespace mpllibs
 
     //=========================================================================
 
-    boost::shared_ptr<boost::xpressive::sregex> seq_expr_ptr;
-
-    struct seq_builder
+    struct empty_seq
     {
-      template<class E> void operator()(E)
+      typedef empty_seq type;
+      static boost::xpressive::sregex run(int &bracket_counter)
       {
-        BOOST_ASSERT(seq_expr_ptr != 0);
-        std::cout << "seq_builder - regex_id: " << seq_expr_ptr->regex_id()<< " use_count: " << seq_expr_ptr.use_count() << std::endl;
-        if (seq_expr_ptr->regex_id() == 0) {
-          *seq_expr_ptr = E::type::run();
-        }
-        else {
-          boost::xpressive::sregex tmp = *seq_expr_ptr >> E::type::run();
-          *seq_expr_ptr = tmp;
-        }
+        std::cout << "empty_seq: " << bracket_counter << std::endl;
+        return boost::xpressive::as_xpr("");
       }
     };
 
-    struct build_sequence
+    struct build_seq
     {
-      template <class Seq>
+      template <class Next, class State>
       struct apply
       {
         typedef apply type;
+        static boost::xpressive::sregex run(int &bracket_counter)
+        {
+          std::cout << "build_seq: " << bracket_counter << std::endl;
+          return State::type::run(bracket_counter) >> Next::type::run(bracket_counter);
+        }
+      };
+    };
 
-        static boost::xpressive::sregex run() {
-          std::cout << "build_sequence - before new" << std::endl;
-          seq_expr_ptr.reset(new boost::xpressive::sregex);
-          std::cout << "build_sequence - after new" << std::endl;
-
-          boost::mpl::for_each<Seq>(seq_builder());
-          std::cout << "build_sequence - after seq_builder" << std::endl;
-          return *seq_expr_ptr; 
+    struct eval_seq
+    {
+      template <class S>
+      struct apply
+      {
+        typedef apply type;
+        static boost::xpressive::sregex run(int &bracket_counter)
+        {
+          std::cout << "eval_seq: " << bracket_counter << std::endl;
+          return S::type::run(bracket_counter);
         }
       };
     };
 
     typedef metaparse::transform<
-      metaparse::any< xlxpressive::unary_item >,
-      xlxpressive::build_sequence
+      metaparse::foldl<
+        xlxpressive::unary_item,
+        xlxpressive::empty_seq,
+        xlxpressive::build_seq
+      >,
+      xlxpressive::eval_seq
     >
     seq;
     
     //=========================================================================
 
-    boost::xpressive::sregex alternation;
-
-    struct reg_exp_builder
+    struct build_reg_exp
     {
-      template<class Seq> void operator()(Seq)
-      {
-        boost::xpressive::sregex tmp = alternation | Seq::type::run();
-        alternation = tmp;
-      }
-    };
-
-    struct build_regular_expression
-    {
-      template <class Seq>
+      template <class Next, class State>
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run() {
-          std::cout << "build_regular_expression - init alternation" << std::endl;
-          alternation = boost::mpl::front<Seq>::type::run();
-          std::cout << "build_regular_expression - for_each reg_exp_builder" << std::endl;
-          boost::mpl::for_each< typename boost::mpl::back<Seq>::type >(reg_exp_builder());
-          std::cout << "build_regular_expression - returning alternation" << std::endl;
+        static boost::xpressive::sregex run(int &bracket_counter)
+        {
+          std::cout << "build_reg_exp: " << bracket_counter << std::endl;
+          return State::type::run(bracket_counter) | Next::type::run(bracket_counter);
+        }
+      };
+    };
 
-          return alternation;
+    struct eval_reg_exp
+    {
+      template <class Re>
+      struct apply
+      {
+        typedef apply type;
+        static boost::xpressive::sregex run(int bracket_counter=0)
+        {
+          std::cout << "eval_reg_exp: " << bracket_counter << std::endl;
+          return Re::type::run(bracket_counter);
         }
       };
     };
 
     struct reg_exp : metaparse::transform<
-      metaparse::sequence<
+      metaparse::foldlp<
+        metaparse::last_of< metaparse::lit_c<'|'>, xlxpressive::seq >,
         xlxpressive::seq,
-        metaparse::any_one_of<
-          metaparse::last_of<
-            metaparse::lit_c<'|'>,
-            xlxpressive::seq
-          >
-        >
+        xlxpressive::build_reg_exp
       >,
-      xlxpressive::build_regular_expression
+      xlxpressive::eval_reg_exp
     >
     {};
     
