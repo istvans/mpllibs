@@ -3,39 +3,12 @@
 ; (See accompanying file LICENSE_1_0.txt or copy at
 ;       http://www.boost.org/LICENSE_1_0.txt)
 
-[test32]
-str=foo
-pat=(foo)
-flg=
-br0=foo
-br1=foo
-[end]
-
-[test33]
-str=foo
-pat=(?:foo)
-flg=
-br0=foo
-[end]
-
-[test34]
-str=foobar
-pat=(?>foo)bar
-flg=
-br0=foobar
-[end]
-
-[test35]
-str=foobar
-pat=foo(?=bar)
-flg=
-br0=foo
-[end]
 
 [test36]
-str=foobar
-pat=(?<=foo)bar
+str=<html>foo<html>
+pat=<(html)>foo<\\1>
 flg=
-br0=bar
+br0=<html>foo<html>
+br1=html
 [end]
 

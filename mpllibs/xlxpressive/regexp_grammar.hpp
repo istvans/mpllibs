@@ -123,7 +123,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout<< "  build_number-run(after)" << std::endl;
           return after;
         }
         
@@ -134,7 +133,6 @@ namespace mpllibs
           template <class T>
           static boost::xpressive::sregex run(T after)
           {
-            std::cout << "  build_number-add_set_item" << std::endl;
             return Before::type::run( char_value() | after );
           }
         };
@@ -153,20 +151,17 @@ namespace mpllibs
 
         static boost::xpressive::sregex run(int &bracket_counter)
         {
-          std::cout<< "  build_letter-run: " << ch::value << std::endl;
           return boost::xpressive::as_xpr( ch::value );
         }
 
         static char char_value()
         {
-          std::cout<< "  build_letter-char_value: " << ch::value << std::endl;
           return ch::value;
         }
 
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout<< "  build_letter-run(after)" << std::endl;
           return after;
         }
         
@@ -177,7 +172,6 @@ namespace mpllibs
           template <class T>
           static boost::xpressive::sregex run(T after)
           {
-            std::cout << "  build_letter-add_set_item: " << ch::value << std::endl;
             return Before::type::run( char_value() | after );
           }
         };
@@ -202,7 +196,6 @@ namespace mpllibs
       typedef back_reference1 type;
       static boost::xpressive::sregex run(int &bracket_counter)
       {
-        std::cout<< "  back_reference1: " << bracket_counter << std::endl;
         return boost::xpressive::s1;
       }
     };
@@ -315,7 +308,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  word_boundary-run(after)" << std::endl;
         return after;
       }
         
@@ -326,7 +318,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  word_boundary-add_set_item" << std::endl;
           return Before::type::run( boost::xpressive::_b | after );
         }
       };
@@ -343,7 +334,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  not_word_boundary-run(after)" << std::endl;
         return after;
       }
         
@@ -354,7 +344,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  not_word_boundary-add_set_item" << std::endl;
           return Before::type::run( ~boost::xpressive::_b | after );
         }
       };
@@ -371,7 +360,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  digit_character-run(after)" << std::endl;
         return after;
       }
         
@@ -382,7 +370,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  digit_character-add_set_item" << std::endl;
           return Before::type::run( boost::xpressive::_d | after );
         }
       };
@@ -399,7 +386,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  not_digit_character-run(after)" << std::endl;
         return after;
       }
         
@@ -410,7 +396,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  not_digit_character-add_set_item" << std::endl;
           return Before::type::run( ~boost::xpressive::_d | after );
         }
       };
@@ -427,7 +412,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  build_letter-run(after)" << std::endl;
         return after;
       }
         
@@ -438,7 +422,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  word_character-add_set_item" << std::endl;
           return Before::type::run( boost::xpressive::_w | after );
         }
       };
@@ -455,7 +438,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  not_word_character-run(after)" << std::endl;
         return after;
       }
         
@@ -466,7 +448,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  not_word_character-add_set_item" << std::endl;
           return Before::type::run( ~boost::xpressive::_w | after );
         }
       };
@@ -483,7 +464,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  space_character-run(after)" << std::endl;
         return after;
       }
         
@@ -494,7 +474,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  space_character-add_set_item" << std::endl;
           return Before::type::run( boost::xpressive::_s | after );
         }
       };
@@ -511,7 +490,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  not_space_character-run(after)" << std::endl;
         return after;
       }
         
@@ -522,7 +500,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  not_space_character-add_set_item" << std::endl;
           return Before::type::run( ~boost::xpressive::_s | after );
         }
       };
@@ -539,7 +516,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  logical_newline-run(after)" << std::endl;
         return after;
       }
         
@@ -550,7 +526,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  logical_newline-add_set_item" << std::endl;
           return Before::type::run( boost::xpressive::_ln | after );
         }
       };
@@ -567,7 +542,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  literal_newline-run(after)" << std::endl;
         return after;
       }
         
@@ -578,7 +552,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  literal_newline-add_set_item" << std::endl;
           return Before::type::run( boost::xpressive::_n | after );
         }
       };
@@ -595,7 +568,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  backslash-run(after)" << std::endl;
         return after;
       }
         
@@ -606,7 +578,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  backslash-add_set_item" << std::endl;
           return Before::type::run( '\\' | after );
         }
       };
@@ -623,7 +594,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  caret-run(after)" << std::endl;
         return after;
       }
         
@@ -634,7 +604,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  caret-add_set_item" << std::endl;
           return Before::type::run( '^' | after );
         }
       };
@@ -651,7 +620,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  dollar-run(after)" << std::endl;
         return after;
       }
         
@@ -662,7 +630,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  dollar-add_set_item" << std::endl;
           return Before::type::run( '$' | after );
         }
       };
@@ -679,7 +646,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout<< "  full_stop-run(after)" << std::endl;
         return after;
       }
         
@@ -690,7 +656,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "  full_stop-add_set_item" << std::endl;
           return Before::type::run( '.' | after );
         }
       };
@@ -704,14 +669,12 @@ namespace mpllibs
         typedef apply type;
         static boost::xpressive::sregex run(int &bracket_counter)
         {
-          std::cout<< "  build_bschar: " << bracket_counter << std::endl;
           return Bschar::type::run(bracket_counter);
         }
 
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout<< "  build_bschar-run(after)" << std::endl;
           return after;
         }
         
@@ -722,7 +685,6 @@ namespace mpllibs
           template <class T>
           static boost::xpressive::sregex run(T after)
           {
-            std::cout << "  build_bschar-add_set_item" << std::endl;
             return Bschar::template add_set_item<Before>::type::run(after);
           }
         };
@@ -796,7 +758,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout<< "  build_non_alphabet-run(after)" << std::endl;
           return after;
         }
         
@@ -807,7 +768,6 @@ namespace mpllibs
           template <class T>
           static boost::xpressive::sregex run(T after)
           {
-            std::cout << "  build_non_alphabet-add_set_item: " << ch::value << std::endl;
             return Before::type::run( ch::value | after );
           }
         };
@@ -830,7 +790,8 @@ namespace mpllibs
         metaparse::lit_c<'@'>,
         metaparse::lit_c<'#'>,
         metaparse::lit_c<'%'>,
-        metaparse::lit_c<'&'>
+        metaparse::lit_c<'&'>,
+        metaparse::lit_c<'/'>
       >,
       xlxpressive::build_non_alphabet
     >
@@ -862,7 +823,6 @@ namespace mpllibs
       typedef no_back_ref type;
       static boost::xpressive::sregex run(boost::xpressive::sregex s)
       {
-        std::cout << "  no_back_ref" << std::endl;
         return (s);
       }
     };
@@ -872,7 +832,6 @@ namespace mpllibs
       typedef icase type;
       static boost::xpressive::sregex run(boost::xpressive::sregex s)
       {
-        std::cout << "  icase" << std::endl;
         return boost::xpressive::icase(s);
       }
     };
@@ -882,7 +841,6 @@ namespace mpllibs
       typedef keep type;
       static boost::xpressive::sregex run(boost::xpressive::sregex s)
       {
-        std::cout << "  keep" << std::endl;
         return boost::xpressive::keep(s);
       }
     };
@@ -892,7 +850,6 @@ namespace mpllibs
       typedef before type;
       static boost::xpressive::sregex run(boost::xpressive::sregex s)
       {
-        std::cout << "  before" << std::endl;
         return boost::xpressive::before(s);
       }
     };
@@ -902,7 +859,6 @@ namespace mpllibs
       typedef not_before type;
       static boost::xpressive::sregex run(boost::xpressive::sregex s)
       {
-        std::cout << "  not_before" << std::endl;
         return ~boost::xpressive::before(s);
       }
     };
@@ -912,7 +868,6 @@ namespace mpllibs
       typedef after type;
       static boost::xpressive::sregex run(const boost::xpressive::sregex s)
       {
-        std::cout << "  after" << std::endl;
         return boost::xpressive::after(s);
       }
     };
@@ -922,7 +877,6 @@ namespace mpllibs
       typedef not_after type;
       static boost::xpressive::sregex run(boost::xpressive::sregex s)
       {
-        std::cout << "  not_after" << std::endl;
         return ~boost::xpressive::after(s);
       }
     };
@@ -934,9 +888,7 @@ namespace mpllibs
       {
         typedef apply type;
         static boost::xpressive::sregex run(int &bracket_counter) {
-          std::cout << "build_qexp - getting tmp" << std::endl;
           const boost::xpressive::sregex tmp = boost::mpl::at< Seq, boost::mpl::int_<2> >::type::run(bracket_counter);
-          std::cout << "build_qexp - got tmp" << std::endl;
           return boost::mpl::at< Seq, boost::mpl::int_<1> >::type::run( tmp );
         }
       };
@@ -980,7 +932,6 @@ namespace mpllibs
         typedef apply type;
         static boost::xpressive::sregex run(int &bracket_counter)
         {
-          std::cout << "build_qexp_based_bracket_exp: " << bracket_counter << std::endl;
           return E::type::run(bracket_counter);
         }
       };
@@ -995,8 +946,9 @@ namespace mpllibs
         static boost::xpressive::sregex run(int &bracket_counter)
         {
           ++bracket_counter;
-          std::cout<< "build_reg_exp_based_bracket_exp - capturing: " << bracket_counter <<std::endl;
+
           boost::xpressive::sregex a = E::type::run(bracket_counter);
+
           boost::xpressive::sregex ret;
           switch(bracket_counter) {
             case 1: ret = (boost::xpressive::s1= a); break;
@@ -1009,7 +961,6 @@ namespace mpllibs
             case 8: ret = (boost::xpressive::s8= a); break;
             case 9: ret = (boost::xpressive::s9= a); break;
           }
-          std::cout<< "build_reg_exp_based_bracket_exp - returning " << bracket_counter << std::endl;
           return ret;
         }
       };
@@ -1023,7 +974,6 @@ namespace mpllibs
         typedef apply type;
         static boost::xpressive::sregex run(int &bracket_counter)
         {
-          std::cout<< "eval_bracket_exp: " << bracket_counter << std::endl;
           return E::type::run(bracket_counter);
         }
       };
@@ -1313,7 +1263,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout<< "  build_range-run(after)" << std::endl;
           return after;
         }
         
@@ -1328,7 +1277,6 @@ namespace mpllibs
             using boost::mpl::at;
             using boost::mpl::int_;
 
-            std::cout << "  build_range-add_set_item" << std::endl;
             return Before::type::run( range( at< Seq, int_<0> >::type::char_value(), at< Seq, int_<2> >::type::char_value() ) | after );
           }
         };
@@ -1353,7 +1301,6 @@ namespace mpllibs
       template <class T>
       static boost::xpressive::sregex run(T after)
       {
-        std::cout << "empty_set run" << std::endl;
         return boost::xpressive::set[ after ];
       }
     };
@@ -1368,7 +1315,6 @@ namespace mpllibs
         template <class T>
         static boost::xpressive::sregex run(T after)
         {
-          std::cout << "set_builder run" << std::endl;
           return Next::template add_set_item< State >::type::run(after);
         }
       };
@@ -1382,7 +1328,6 @@ namespace mpllibs
         typedef apply type;
         static boost::xpressive::sregex run()
         {
-          std::cout << "start_building_set run" << std::endl;
           return RealSetBuilder::type::run(boost::xpressive::range('4', '2'));
         }
       };
@@ -1669,7 +1614,6 @@ namespace mpllibs
       {
         typedef apply type;
         static boost::xpressive::sregex run(int &bracket_counter) {
-          std::cout << "build_unary_item: " << bracket_counter << std::endl;
           return boost::mpl::back<Seq>::type::run(boost::mpl::front<Seq>::type::run(bracket_counter));
         }
       };
@@ -1688,7 +1632,6 @@ namespace mpllibs
       typedef empty_seq type;
       static boost::xpressive::sregex run(int &bracket_counter)
       {
-        std::cout << "empty_seq: " << bracket_counter << std::endl;
         return boost::xpressive::as_xpr("");
       }
     };
@@ -1701,33 +1644,16 @@ namespace mpllibs
         typedef apply type;
         static boost::xpressive::sregex run(int &bracket_counter)
         {
-          std::cout << "build_seq: " << bracket_counter << std::endl;
-          return State::type::run(bracket_counter) >> Next::type::run(bracket_counter);
+          boost::xpressive::sregex s = State::type::run(bracket_counter);
+          return s >> Next::type::run(bracket_counter);
         }
       };
     };
 
-    struct eval_seq
-    {
-      template <class S>
-      struct apply
-      {
-        typedef apply type;
-        static boost::xpressive::sregex run(int &bracket_counter)
-        {
-          std::cout << "eval_seq: " << bracket_counter << std::endl;
-          return S::type::run(bracket_counter);
-        }
-      };
-    };
-
-    typedef metaparse::transform<
-      metaparse::foldl<
-        xlxpressive::unary_item,
-        xlxpressive::empty_seq,
-        xlxpressive::build_seq
-      >,
-      xlxpressive::eval_seq
+    typedef metaparse::foldl<
+      xlxpressive::unary_item,
+      xlxpressive::empty_seq,
+      xlxpressive::build_seq
     >
     seq;
     
@@ -1741,8 +1667,8 @@ namespace mpllibs
         typedef apply type;
         static boost::xpressive::sregex run(int &bracket_counter)
         {
-          std::cout << "build_reg_exp: " << bracket_counter << std::endl;
-          return State::type::run(bracket_counter) | Next::type::run(bracket_counter);
+          boost::xpressive::sregex s = State::type::run(bracket_counter);
+          return s | Next::type::run(bracket_counter);
         }
       };
     };
@@ -1755,7 +1681,6 @@ namespace mpllibs
         typedef apply type;
         static boost::xpressive::sregex run(int bracket_counter=0)
         {
-          std::cout << "eval_reg_exp: " << bracket_counter << std::endl;
           return Re::type::run(bracket_counter);
         }
       };

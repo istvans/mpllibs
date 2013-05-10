@@ -22,7 +22,7 @@
 BOOST_AUTO_TEST_CASE(test_grammar)
 {
   std::vector<std::string> matched;
-  //Number of test cases: 41
+  //Number of test cases: 45
 
   //[test1]
   BOOST_REQUIRE(true); //perl test
@@ -302,6 +302,35 @@ BOOST_AUTO_TEST_CASE(test_grammar)
   BOOST_REQUIRE(true); //perl test
   typedef boost::mpl::string< '^[[:','lowe','r:]]','+$' > Regexp40;
   BOOST_REQUIRE( search< Regexp40 >("fOo", matched) );
+  matched.clear();
+
+  //[test32]
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("foo");
+  matched.push_back("foo");
+  typedef boost::mpl::string< '(foo',')' > Regexp41;
+  BOOST_REQUIRE( search< Regexp41 >("foo", matched) );
+  matched.clear();
+
+  //[test33]
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("foo");
+  typedef boost::mpl::string< '(?:f','oo)' > Regexp42;
+  BOOST_REQUIRE( search< Regexp42 >("foo", matched) );
+  matched.clear();
+
+  //[test34]
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("foobar");
+  typedef boost::mpl::string< '(?>f','oo)b','ar' > Regexp43;
+  BOOST_REQUIRE( search< Regexp43 >("foobar", matched) );
+  matched.clear();
+
+  //[test35]
+  BOOST_REQUIRE(true); //perl test
+  matched.push_back("foo");
+  typedef boost::mpl::string< 'foo(','?=ba','r)' > Regexp44;
+  BOOST_REQUIRE( search< Regexp44 >("foobar", matched) );
   matched.clear();
 }
 

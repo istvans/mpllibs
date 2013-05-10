@@ -22,7 +22,7 @@ unary_item ::= item (('*'|'+'|'?'|repeat) '?'?)?
 repeat ::= '{' (number ',' number|',' number| number ',') '}'
 item ::= bos|eos|any|bracket_exp|group|set_item
 set_item ::= bschar|number|letter|non_alphabet
-non_alphabet ::= space|','|';'|':'|'='|'~'|'<'|'>'|'-'|'_'|'!'|'@'|'#'|'%'|'&'
+non_alphabet ::= space|','|';'|':'|'='|'~'|'<'|'>'|'-'|'_'|'!'|'@'|'#'|'%'|'&'|'/'
 letter ::= 'A'-'Z'|'a'-'z'
 number ::= '0'-'9'
 bos ::= '^'
