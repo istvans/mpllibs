@@ -7,8 +7,9 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mpllibs/xlxpressive/regexp_grammar.hpp>
+#include <mpllibs/metaparse/string.hpp>
 
-#define MPLLIBS_REGEX(s) (boost::mpl::apply_wrap1<regexp_parser, MPLLIBS_STRING(s)>::type::run())
+#define MPLLIBS_REGEX(s) (boost::mpl::apply_wrap1<mpllibs::xlxpressive::regexp_parser, MPLLIBS_STRING(s)>::type::run())
 
 #endif // MPLLIBS_XLXPRESSIVE_XLXPRESSIVE_H
 

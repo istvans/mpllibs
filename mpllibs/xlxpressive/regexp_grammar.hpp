@@ -43,9 +43,6 @@
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
 
-#include <boost/assert.hpp>
-#include <boost/shared_ptr.hpp>
-
 namespace mpllibs
 {
   namespace xlxpressive
@@ -1698,7 +1695,7 @@ namespace mpllibs
     
     //=========================================================================
 
-    typedef metaparse::build_parser< metaparse::entire_input<reg_exp> > regexp_parser;
+    typedef metaparse::build_parser< metaparse::entire_input<xlxpressive::reg_exp> > regexp_parser;
   }
 }
 
