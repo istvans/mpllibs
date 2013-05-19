@@ -4,4 +4,4 @@
 #          http://www.boost.org/LICENSE_1_0.txt)
 
 aux_source_directory(. SOURCES)
-add_executable(accept_any ${SOURCES})
+add_executable(comparison ${SOURCES})

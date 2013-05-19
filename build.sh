@@ -9,6 +9,6 @@ cmake .. \
   -DCMAKE_CXX_FLAGS:STRING="-std=c++0x -I$BOOST_ROOT/include -L$BOOST_ROOT/lib"
 
 export LD_LIBRARY_PATH=$BOOST_ROOT/lib
-make $*
-make test
+
+make $* && make test
 
