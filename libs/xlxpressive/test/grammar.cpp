@@ -304,7 +304,7 @@ BOOST_AUTO_TEST_CASE(test_grammar)
   BOOST_REQUIRE( search< Regexp40 >("fOo", matched) );
   matched.clear();
 
-  //[test32]
+  //[test42]
   BOOST_REQUIRE(true); //perl test
   matched.push_back("foo");
   matched.push_back("foo");
@@ -312,21 +312,21 @@ BOOST_AUTO_TEST_CASE(test_grammar)
   BOOST_REQUIRE( search< Regexp41 >("foo", matched) );
   matched.clear();
 
-  //[test33]
+  //[test43]
   BOOST_REQUIRE(true); //perl test
   matched.push_back("foo");
   typedef boost::mpl::string< '(?:f','oo)' > Regexp42;
   BOOST_REQUIRE( search< Regexp42 >("foo", matched) );
   matched.clear();
 
-  //[test34]
+  //[test44]
   BOOST_REQUIRE(true); //perl test
   matched.push_back("foobar");
   typedef boost::mpl::string< '(?>f','oo)b','ar' > Regexp43;
   BOOST_REQUIRE( search< Regexp43 >("foobar", matched) );
   matched.clear();
 
-  //[test35]
+  //[test45]
   BOOST_REQUIRE(true); //perl test
   matched.push_back("foo");
   typedef boost::mpl::string< 'foo(','?=ba','r)' > Regexp44;

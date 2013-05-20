@@ -657,6 +657,32 @@ namespace mpllibs
         }
       };
     };
+    //\+ -> as_xpr('+')
+    struct plus
+    {
+      typedef plus type;
+      static boost::xpressive::sregex run(int &bracket_counter)
+      {
+        return boost::xpressive::as_xpr('+');
+      }
+
+      template <class T>
+      static boost::xpressive::sregex run(T after)
+      {
+        return after;
+      }
+        
+      template <class Before>
+      struct add_set_item {
+        typedef add_set_item type;
+
+        template <class T>
+        static boost::xpressive::sregex run(T after)
+        {
+          return Before::type::run( '+' | after );
+        }
+      };
+    };
 
     struct build_bschar
     {
@@ -715,7 +741,8 @@ namespace mpllibs
           metaparse::one_of<
             metaparse::always< metaparse::lit_c<'^'>, xlxpressive::caret >,
             metaparse::always< metaparse::lit_c<'$'>, xlxpressive::dollar >,
-            metaparse::always< metaparse::lit_c<'.'>, xlxpressive::full_stop >
+            metaparse::always< metaparse::lit_c<'.'>, xlxpressive::full_stop >,
+            metaparse::always< metaparse::lit_c<'+'>, xlxpressive::plus >
           >,
           metaparse::one_of<
             metaparse::always<
