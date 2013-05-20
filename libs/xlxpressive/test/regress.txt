@@ -283,7 +283,7 @@ pat=^[[:lower:]]+$
 flg=
 [end]
 
-[test32]
+[test42]
 str=foo
 pat=(foo)
 flg=
@@ -291,21 +291,21 @@ br0=foo
 br1=foo
 [end]
 
-[test33]
+[test43]
 str=foo
 pat=(?:foo)
 flg=
 br0=foo
 [end]
 
-[test34]
+[test44]
 str=foobar
 pat=(?>foo)bar
 flg=
 br0=foobar
 [end]
 
-[test35]
+[test45]
 str=foobar
 pat=foo(?=bar)
 flg=
