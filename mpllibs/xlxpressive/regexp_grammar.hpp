@@ -1703,7 +1703,12 @@ namespace mpllibs
       struct apply
       {
         typedef apply type;
-        static boost::xpressive::sregex run(int bracket_counter=0)
+        static boost::xpressive::sregex run()
+        {
+          int bracket_counter = 0;
+          return Re::type::run(bracket_counter);
+        }    
+        static boost::xpressive::sregex run(int &bracket_counter)
         {
           return Re::type::run(bracket_counter);
         }
