@@ -1,4 +1,4 @@
-// Copyright Istan Siroki (stevesiroki@gmail.com) 2012.
+// Copyright Istan Siroki (stevesiroki@gmail.com) 2013.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -7,11 +7,10 @@ mpllibs::xlxpressive
 ==================
 István Siroki
 
-TODO
-
-link:manual.html[User manual] +
-link:reference.html[Library reference] +
-link:performance.html[Performance] +
+Xlxpresive is a working implementation of a compile-time string based
+interface for static Xpressive. This solution gives a macro called
++MPLLIBS_REGEX+ which can be used like a function which has a string
+argument; the regular expression. The static Xpressive object which corresponds to the specified string will be generated in compile-time.
 
 Related publications
 --------------------

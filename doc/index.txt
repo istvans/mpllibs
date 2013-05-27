@@ -25,6 +25,8 @@ _mpllibs_ contains the following libraries:
     DSL code as part of the C++ compilation process
 * link:libs/safe_printf/html/index.html[safe_printf] -
     A type-safe +printf+, +fprintf+ and +sprintf+ implementation
+* link:libs/xlxpressive/html/index.html[xlxpressie] -
+    A new compile-time string-based interface for static +Xpressive+
 
 Getting the library
 -------------------
